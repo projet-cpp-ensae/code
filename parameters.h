@@ -73,6 +73,7 @@ public:
 	void applyValue();
 	void removeValue();
 	void incrementP(int x_click, int y_click);
+	void decrementP(int x_click, int y_click);
 
 };
 

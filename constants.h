@@ -28,3 +28,5 @@ SDL_Surface *pixelMap = NULL;
 SDL_Surface *individual0 = NULL;
 SDL_Surface *maison0 = NULL;
 SDL_Surface *route0 = NULL;
+
+SDL_Surface *parametersBackground = NULL;

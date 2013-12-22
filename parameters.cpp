@@ -51,17 +51,22 @@ void parameters::removeValue()
 
 void parameters::incrementP(int x_click, int y_click)
 {
-	if (x_click>_x && x_click<_x + 200 && y_click>_y && y_click<_y + 200){
+	if (_value<20){
 		removeValue();
 		_value += 1;
 		applyValue();
 	}
-	else{
+
+}
+
+
+void parameters::decrementP(int x_click, int y_click)
+{
+	if (_value>0){
 		removeValue();
 		_value -= 1;
 		applyValue();
 	}
 
 }
-
 
