@@ -2,7 +2,7 @@
 
 
 parameters::parameters(SDL_Surface* screen, SDL_Surface* nameSurface, SDL_Surface* valueSurface, SDL_Surface* buttonP,
-	SDL_Surface* buttonPP, SDL_Surface* buttonM, SDL_Surface* buttonMM, long int value, int x, int y, Uint32 color)
+	SDL_Surface* buttonPP, SDL_Surface* buttonM, SDL_Surface* buttonMM, long int value, int x, int y, int max, int min, int delta, Uint32 color)
 {
 	_screen = screen;
 	_nameSurface = nameSurface;
@@ -14,6 +14,9 @@ parameters::parameters(SDL_Surface* screen, SDL_Surface* nameSurface, SDL_Surfac
 	_value = value;
 	_x = x;
 	_y = y;
+	_max = max;
+	_min = min;
+	_delta = delta;
 	_color = color;
 }
 
@@ -35,7 +38,7 @@ void parameters::initParameters()
 
 void parameters::applyValue()
 {
-	figures valueFigures(_screen, &_value, _x + c + h, _y + c, _color);
+	figures valueFigures(_screen, &_value, _x + l1 + e, _y + e, _color);
 	valueFigures.refresh();
 	SDL_Flip(_screen);
 }
@@ -49,22 +52,22 @@ void parameters::removeValue()
 }
 
 
-void parameters::incrementP(int x_click, int y_click)
+void parameters::incrementP()
 {
-	if (_value<20){
+	if (_value<_max){
 		removeValue();
-		_value += 1;
+		_value += _delta;
 		applyValue();
 	}
 
 }
 
 
-void parameters::decrementP(int x_click, int y_click)
+void parameters::decrementP()
 {
-	if (_value>0){
+	if (_value>_min){
 		removeValue();
-		_value -= 1;
+		_value -= _delta;
 		applyValue();
 	}
 

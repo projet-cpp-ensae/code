@@ -62,14 +62,36 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) 
 
 void changeParameter(){
 	int j = 0;
-	long populationValue = 11;
-	long populationValue1 = 14;
-	parameters population(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue, 0, 0, 0xffff00);
+	long populationValue = 10000;
+	long populationValue1 = 25;
+	long populationValue2 = 25;
+	long populationValue3 = 25;
+	long populationValue4 = 25;
+
+	int populationValuex = 200; int populationValuey = 100 ;
+	int populationValue1x = 600; int populationValue1y = 150 ;
+	int populationValue2x = 600; int populationValue2y =225 ;
+	int populationValue3x = 600; int populationValue3y = 300 ;
+	int populationValue4x = 600; int populationValue4y = 375 ;
+
+	parameters population(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue, populationValuex, populationValuey, 100000, 0, 500, 0xffff00);
+	parameters population1(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue1, populationValue1x, populationValue1y, 100, 0, 1, 0xffff00);
+	parameters population2(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue2, populationValue2x, populationValue2y, 100, 0, 1, 0xffff00);
+	parameters population3(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue3, populationValue3x, populationValue3y, 100, 0, 1, 0xffff00);
+	parameters population4(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue4, populationValue4x, populationValue4y, 100, 0, 1, 0xffff00);
+	
 	population.initParameters();
-	population.applyValue();
-	parameters population1(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue1, 700, 0, 0xffff00);
 	population1.initParameters();
+	population2.initParameters();
+	population3.initParameters();
+	population4.initParameters();
+	
+	population.applyValue();
 	population1.applyValue();
+	population2.applyValue();
+	population3.applyValue();
+	population4.applyValue();
+	
 	while (j == 0){
 		SDL_Event event;
 		int x, y;
@@ -82,10 +104,13 @@ void changeParameter(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
-			if (x < 700 && y < 250){
-				population.incrementP(x, y);
-				population1.decrementP(x, y);
+			if (x > marginLeft + l1 + l2bis && x < marginLeft + l1 + l2bis + l3 && y > 100 && y < 100 + h0){
+				population.incrementP();
 			}
+			else if (x > marginLeft + l1 + l2bis && x < marginLeft + l1 + l2bis + l3 && y > 100 + h0 && y < 100 + h){
+				population.decrementP();
+			}
+
 			else j = 1;
 			break;
 
@@ -107,7 +132,7 @@ int main(int argc, char* args[]) {
 	do{
 		//pour tester les parametres
 		//startButton = load_image("images\\startButton.bmp");
-		parametersBackground = load_image("images\\parametersBackground.bmp");
+		parametersBackground = load_image("images\\parametersImages\\parametersBackground2.bmp");
 		apply_surface(0, 0, parametersBackground, screen);
 		changeParameter();
 		homeStart();
