@@ -1,0 +1,15 @@
+Please select the parameters:
+	
+	Population 	The size of the population.
+	
+	Infectives1	The rate of people infected by only disease 1.
+	Infectives2	The rate of people infected by only disease 2.
+	Infectives12	The rate of people infected by disease 1 and disease 2.
+	Susceptibles	The rate of people not infected by any of the diseases. They are susceptibles to be infected by both.
+
+	Male 		The rate of the male population.
+	Female		The rate of the female population.
+
+	Young		The rate of the young-age population (.....).
+	Medium		The rate of the medium-age population (.....).
+	Old		The rate of the old-age population (.....).
