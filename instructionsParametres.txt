@@ -2,10 +2,10 @@ Please select the parameters:
 	
 	Population 	The size of the population.
 	
-	Infectives1	The rate of people infected by only disease 1.
-	Infectives2	The rate of people infected by only disease 2.
-	Infectives12	The rate of people infected by disease 1 and disease 2.
-	Susceptibles	The rate of people not infected by any of the diseases. They are susceptibles to be infected by both.
+	Infectives1	The rate of people infected with only disease 1.
+	Infectives2	The rate of people infected with only disease 2.
+	Infectives12	The rate of people infected with disease 1 and disease 2.
+	Susceptibles	The rate of people not infected with any of the diseases. They are susceptibles to be infected with both.
 
 	Male 		The rate of the male population.
 	Female		The rate of the female population.
