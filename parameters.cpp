@@ -52,7 +52,7 @@ void parameters::removeValue()
 }
 
 
-void parameters::incrementP()
+void parameters::increment()
 {
 	if (_value<_max){
 		removeValue();
@@ -63,7 +63,7 @@ void parameters::incrementP()
 }
 
 
-void parameters::decrementP()
+void parameters::decrement()
 {
 	if (_value>_min){
 		removeValue();

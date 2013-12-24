@@ -63,34 +63,59 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) 
 void changeParameter(){
 	int j = 0;
 	long populationValue = 10000;
-	long populationValue1 = 25;
-	long populationValue2 = 25;
-	long populationValue3 = 25;
-	long populationValue4 = 25;
+	long infectives1Value = 25;
+	long infectives2Value = 25;
+	long infectives12Value = 25;
+	long susceptiblesValue = 25;
+	long maleValue = 50;
+	long femaleValue = 50;
+	long youngValue = 10;
+	long mediumValue = 80;
+	long oldValue = 10;
 
-	int populationValuex = 200; int populationValuey = 100 ;
-	int populationValue1x = 600; int populationValue1y = 150 ;
-	int populationValue2x = 600; int populationValue2y =225 ;
-	int populationValue3x = 600; int populationValue3y = 300 ;
-	int populationValue4x = 600; int populationValue4y = 375 ;
+	int populationx = 200; int populationy = 100 ;
+	int infectives1x = 600; int infectives1y = 150 ;
+	int infectives2x = 600; int  infectives2y =225 ;
+	int infectives12x = 600; int infectives12y = 300 ;
+	int susceptiblesx = 600; int susceptiblesy = 375 ;
+	int malex = 950; int maley = 425;
+	int femalex = 950; int femaley = 500;
+	int youngx = 950; int youngy = 650;
+	int mediumx = 950; int mediumy = 725;
+	int oldx = 950; int oldy = 800;
 
-	parameters population(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue, populationValuex, populationValuey, 100000, 0, 500, 0xffff00);
-	parameters population1(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue1, populationValue1x, populationValue1y, 100, 0, 1, 0xffff00);
-	parameters population2(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue2, populationValue2x, populationValue2y, 100, 0, 1, 0xffff00);
-	parameters population3(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue3, populationValue3x, populationValue3y, 100, 0, 1, 0xffff00);
-	parameters population4(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue4, populationValue4x, populationValue4y, 100, 0, 1, 0xffff00);
-	
+	parameters population(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue, populationx, populationy, 100000, 0, 500, 0xffff00);
+	parameters infectives1(screen, startButton, startButton, startButton, startButton, startButton, startButton, infectives1Value, infectives1x, infectives1y, 100, 0, 1, 0xffff00);
+	parameters infectives2(screen, startButton, startButton, startButton, startButton, startButton, startButton, infectives2Value, infectives2x, infectives2y, 100, 0, 1, 0xffff00);
+	parameters infectives12(screen, startButton, startButton, startButton, startButton, startButton, startButton, infectives12Value, infectives12x, infectives12y, 100, 0, 1, 0xffff00);
+	parameters susceptibles(screen, startButton, startButton, startButton, startButton, startButton, startButton, susceptiblesValue, susceptiblesx, susceptiblesy, 100, 0, 1, 0xffff00);
+	parameters male(screen, startButton, startButton, startButton, startButton, startButton, startButton, maleValue, malex, maley, 100, 0, 1, 0xffff00);
+	parameters female(screen, startButton, startButton, startButton, startButton, startButton, startButton, femaleValue, femalex, femaley, 100, 0, 1, 0xffff00);
+	parameters young(screen, startButton, startButton, startButton, startButton, startButton, startButton, youngValue, youngx, youngy, 100, 0, 1, 0xffff00);
+	parameters medium(screen, startButton, startButton, startButton, startButton, startButton, startButton, mediumValue, mediumx, mediumy, 100, 0, 1, 0xffff00);
+	parameters old(screen, startButton, startButton, startButton, startButton, startButton, startButton, oldValue, oldx, oldy, 100, 0, 1, 0xffff00);
+
 	population.initParameters();
-	population1.initParameters();
-	population2.initParameters();
-	population3.initParameters();
-	population4.initParameters();
-	
+	infectives1.initParameters();
+	infectives2.initParameters();
+	infectives12.initParameters();
+	susceptibles.initParameters();
+	male.initParameters();
+	female.initParameters();
+	young.initParameters();
+	medium.initParameters();
+	old.initParameters();
+
 	population.applyValue();
-	population1.applyValue();
-	population2.applyValue();
-	population3.applyValue();
-	population4.applyValue();
+	infectives1.applyValue();
+	infectives2.applyValue();
+	infectives12.applyValue();
+	susceptibles.applyValue();
+	male.applyValue();
+	female.applyValue();
+	young.applyValue();
+	medium.applyValue();
+	old.applyValue();
 	
 	while (j == 0){
 		SDL_Event event;
@@ -104,15 +129,80 @@ void changeParameter(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
-			if (x > marginLeft + l1 + l2bis && x < marginLeft + l1 + l2bis + l3 && y > 100 && y < 100 + h0){
-				population.incrementP();
+
+			//Bloc population.
+			if (x > populationx + l1 + l2bis && x < populationx + l1 + l2bis + l3){
+				if (y > populationy && y < populationy + h0){
+					population.increment();
+				}
+				else if (y > populationy + h0 && y < populationy + h){
+					population.decrement();
+				}
 			}
-			else if (x > marginLeft + l1 + l2bis && x < marginLeft + l1 + l2bis + l3 && y > 100 + h0 && y < 100 + h){
-				population.decrementP();
+
+			//Bloc infectives1, infectives2, infectives12 et susceptibles.
+			else if (x > infectives1x + l1 + l2 && x < infectives1x + l1 + l2 + l3){
+				if (y > infectives1y && y < infectives1y + h0){
+					infectives1.increment();
+					susceptibles.decrement();
+				}
+				else if (y > infectives1y + h0 && y < infectives1y + h){
+					infectives1.decrement();
+					susceptibles.increment();
+				}
+				else if (y > infectives2y && y < infectives2y + h0){
+					infectives2.increment();
+					susceptibles.decrement();
+				}
+				else if (y > infectives2y + h0 && y < infectives2y + h){
+					infectives2.decrement();
+					susceptibles.increment();
+				}
+				else if (y > infectives12y && y < infectives12y + h0){
+					infectives12.increment();
+					susceptibles.decrement();
+				}
+				else if (y > infectives12y + h0 && y < infectives12y + h){
+					infectives12.decrement();
+					susceptibles.increment();
+				}
+			}
+			
+			//Bloc male et female.
+			else if (x > malex + l1 + l2 && x < malex + l1 + l2 + l3 && y < youngy){
+				if (y > maley && y < maley + h0){
+					male.increment();
+					female.decrement();
+				}
+				else if (y > maley + h0 && y < maley + h){
+					male.decrement();
+					female.increment();
+				}
+			}
+
+			//Bloc young, medium and old.
+			else if (x > youngx + l1 + l2 && x < youngx + l1 + l2 + l3 && y > youngy){
+				 if (y > youngy && y < youngy + h0){
+					young.increment();
+					old.decrement();
+				}
+				else if (y > youngy + h0 && y < youngy + h){
+					young.decrement();
+					old.increment();
+				}
+				else if (y > mediumy && y < mediumy + h0){
+					medium.increment();
+					old.decrement();
+				}
+				else if (y > mediumy + h0 && y < mediumy + h){
+					medium.decrement();
+					old.increment();
+				}
 			}
 
 			else j = 1;
 			break;
+			
 
 		case SDL_QUIT:
 			exit(EXIT_SUCCESS);
@@ -148,7 +238,7 @@ int main(int argc, char* args[]) {
 		int x0 = 150 * blockSize;
 		int y0 = 100 * blockSize;
 
-		while (day_value < 100)
+		while (day_value < 100000)
 		{
 			//Chargement des images 
 			individual0 = load_image("images\\individual0.bmp");
@@ -158,7 +248,7 @@ int main(int argc, char* args[]) {
 			apply_surface(x0, y0, individual0, screen);
 
 			/*******************************************************
-			//TEST
+			//TEST POUR YUNXUAN
 			SDL_Event event;
 			do
 			SDL_WaitEvent(&event);

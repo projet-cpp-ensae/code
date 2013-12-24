@@ -12,8 +12,8 @@ const int l1 = 3 * h;
 const int l2 = 2 * h;
 const int l2bis = 3 * h;
 const int l3 = h;
-const int marginLeft = 200;
-const int marginTop = 100;
+//const int marginLeft = 200;
+//const int marginTop = 100;
 
 
 const int c = 2 * h;
@@ -83,8 +83,8 @@ public:
 	void initParameters();
 	void applyValue();
 	void removeValue();
-	void incrementP();
-	void decrementP();
+	void increment();
+	void decrement();
 
 };
 
