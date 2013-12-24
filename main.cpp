@@ -84,27 +84,17 @@ void changeParameter(){
 	int mediumx = 950; int mediumy = 725;
 	int oldx = 950; int oldy = 800;
 
-	parameters population(screen, startButton, startButton, startButton, startButton, startButton, startButton, populationValue, populationx, populationy, 100000, 0, 500, 0xffff00);
-	parameters infectives1(screen, startButton, startButton, startButton, startButton, startButton, startButton, infectives1Value, infectives1x, infectives1y, 100, 0, 1, 0xffff00);
-	parameters infectives2(screen, startButton, startButton, startButton, startButton, startButton, startButton, infectives2Value, infectives2x, infectives2y, 100, 0, 1, 0xffff00);
-	parameters infectives12(screen, startButton, startButton, startButton, startButton, startButton, startButton, infectives12Value, infectives12x, infectives12y, 100, 0, 1, 0xffff00);
-	parameters susceptibles(screen, startButton, startButton, startButton, startButton, startButton, startButton, susceptiblesValue, susceptiblesx, susceptiblesy, 100, 0, 1, 0xffff00);
-	parameters male(screen, startButton, startButton, startButton, startButton, startButton, startButton, maleValue, malex, maley, 100, 0, 1, 0xffff00);
-	parameters female(screen, startButton, startButton, startButton, startButton, startButton, startButton, femaleValue, femalex, femaley, 100, 0, 1, 0xffff00);
-	parameters young(screen, startButton, startButton, startButton, startButton, startButton, startButton, youngValue, youngx, youngy, 100, 0, 1, 0xffff00);
-	parameters medium(screen, startButton, startButton, startButton, startButton, startButton, startButton, mediumValue, mediumx, mediumy, 100, 0, 1, 0xffff00);
-	parameters old(screen, startButton, startButton, startButton, startButton, startButton, startButton, oldValue, oldx, oldy, 100, 0, 1, 0xffff00);
+	parameters population(screen, populationValue, populationx, populationy, 100000, 0, 500, 0xffff00);
+	parameters infectives1(screen,  infectives1Value, infectives1x, infectives1y, 100, 0, 1, 0xffff00);
+	parameters infectives2(screen,  infectives2Value, infectives2x, infectives2y, 100, 0, 1, 0xffff00);
+	parameters infectives12(screen,  infectives12Value, infectives12x, infectives12y, 100, 0, 1, 0xffff00);
+	parameters susceptibles(screen, susceptiblesValue, susceptiblesx, susceptiblesy, 100, 0, 1, 0xffff00);
+	parameters male(screen, maleValue, malex, maley, 100, 0, 1, 0xffff00);
+	parameters female(screen, femaleValue, femalex, femaley, 100, 0, 1, 0xffff00);
+	parameters young(screen, youngValue, youngx, youngy, 100, 0, 1, 0xffff00);
+	parameters medium(screen, mediumValue, mediumx, mediumy, 100, 0, 1, 0xffff00);
+	parameters old(screen, oldValue, oldx, oldy, 100, 0, 1, 0xffff00);
 
-	population.initParameters();
-	infectives1.initParameters();
-	infectives2.initParameters();
-	infectives12.initParameters();
-	susceptibles.initParameters();
-	male.initParameters();
-	female.initParameters();
-	young.initParameters();
-	medium.initParameters();
-	old.initParameters();
 
 	population.applyValue();
 	infectives1.applyValue();
@@ -129,79 +119,110 @@ void changeParameter(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
+			if (y < 875){
+				//Bloc population.
+				if (x > populationx + l1 + l2bis && x < populationx + l1 + l2bis + l3){
+					if (y > populationy && y < populationy + h0){
+						if (population.checkIncrement() == 1){
+							population.increment();
+						}
+					}
+					else if (y > populationy + h0 && y < populationy + h){
+						if (population.checkDecrement() == 1){
+							population.decrement();
+						}
+					}
+				}
 
-			//Bloc population.
-			if (x > populationx + l1 + l2bis && x < populationx + l1 + l2bis + l3){
-				if (y > populationy && y < populationy + h0){
-					population.increment();
+				//Bloc infectives1, infectives2, infectives12 et susceptibles.
+				else if (x > infectives1x + l1 + l2 && x < infectives1x + l1 + l2 + l3){
+					if (y > infectives1y && y < infectives1y + h0){
+						if (infectives1.checkIncrement() == 1 && susceptibles.checkDecrement() == 1){
+							infectives1.increment();
+							susceptibles.decrement();
+						}
+					}
+					else if (y > infectives1y + h0 && y < infectives1y + h){
+						if (infectives1.checkDecrement() == 1 && susceptibles.checkIncrement() == 1){
+							infectives1.decrement();
+							susceptibles.increment();
+						}
+					}
+					else if (y > infectives2y && y < infectives2y + h0){
+						if (infectives2.checkIncrement() == 1 && susceptibles.checkDecrement() == 1){
+							infectives2.increment();
+							susceptibles.decrement();
+						}
+					}
+					else if (y > infectives2y + h0 && y < infectives2y + h){
+						if (infectives2.checkDecrement() == 1 && susceptibles.checkIncrement() == 1){
+							infectives2.decrement();
+							susceptibles.increment();
+						}
+					}
+					else if (y > infectives12y && y < infectives12y + h0){
+						if (infectives12.checkIncrement() == 1 && susceptibles.checkDecrement() == 1){
+							infectives12.increment();
+							susceptibles.decrement();
+						}
+					}
+					else if (y > infectives12y + h0 && y < infectives12y + h){
+						if (infectives12.checkDecrement() == 1 && susceptibles.checkIncrement() == 1){
+							infectives12.decrement();
+							susceptibles.increment();
+						}
+					}
 				}
-				else if (y > populationy + h0 && y < populationy + h){
-					population.decrement();
-				}
-			}
-
-			//Bloc infectives1, infectives2, infectives12 et susceptibles.
-			else if (x > infectives1x + l1 + l2 && x < infectives1x + l1 + l2 + l3){
-				if (y > infectives1y && y < infectives1y + h0){
-					infectives1.increment();
-					susceptibles.decrement();
-				}
-				else if (y > infectives1y + h0 && y < infectives1y + h){
-					infectives1.decrement();
-					susceptibles.increment();
-				}
-				else if (y > infectives2y && y < infectives2y + h0){
-					infectives2.increment();
-					susceptibles.decrement();
-				}
-				else if (y > infectives2y + h0 && y < infectives2y + h){
-					infectives2.decrement();
-					susceptibles.increment();
-				}
-				else if (y > infectives12y && y < infectives12y + h0){
-					infectives12.increment();
-					susceptibles.decrement();
-				}
-				else if (y > infectives12y + h0 && y < infectives12y + h){
-					infectives12.decrement();
-					susceptibles.increment();
-				}
-			}
 			
-			//Bloc male et female.
-			else if (x > malex + l1 + l2 && x < malex + l1 + l2 + l3 && y < youngy){
-				if (y > maley && y < maley + h0){
-					male.increment();
-					female.decrement();
+				//Bloc male et female.
+				else if (x > malex + l1 + l2 && x < malex + l1 + l2 + l3 && y < youngy){
+					if (y > maley && y < maley + h0){
+						if (male.checkIncrement() == 1 && female.checkDecrement() == 1){
+							male.increment();
+							female.decrement();
+						}
+					}
+					else if (y > maley + h0 && y < maley + h){
+						if (male.checkDecrement() == 1 && female.checkIncrement() == 1){
+							male.decrement();
+							female.increment();
+						}
+					}
 				}
-				else if (y > maley + h0 && y < maley + h){
-					male.decrement();
-					female.increment();
+
+				//Bloc young, medium and old.
+				else if (x > youngx + l1 + l2 && x < youngx + l1 + l2 + l3 && y > youngy){
+					 if (y > youngy && y < youngy + h0){
+						 if (young.checkIncrement() == 1 && old.checkDecrement() == 1) {
+							 young.increment();
+							 old.decrement();
+						 }
+					}
+					else if (y > youngy + h0 && y < youngy + h){
+						if (young.checkDecrement() == 1 && old.checkIncrement() == 1) {
+							young.decrement();
+							old.increment();
+						}
+					}
+					else if (y > mediumy && y < mediumy + h0){
+						if (medium.checkIncrement() == 1 && old.checkDecrement() == 1) {
+							medium.increment();
+							old.decrement();
+						}
+					}
+					else if (y > mediumy + h0 && y < mediumy + h){
+						if (medium.checkDecrement() == 1 && old.checkIncrement() == 1) {
+							medium.decrement();
+							old.increment();
+						}
+					}
 				}
 			}
 
-			//Bloc young, medium and old.
-			else if (x > youngx + l1 + l2 && x < youngx + l1 + l2 + l3 && y > youngy){
-				 if (y > youngy && y < youngy + h0){
-					young.increment();
-					old.decrement();
-				}
-				else if (y > youngy + h0 && y < youngy + h){
-					young.decrement();
-					old.increment();
-				}
-				else if (y > mediumy && y < mediumy + h0){
-					medium.increment();
-					old.decrement();
-				}
-				else if (y > mediumy + h0 && y < mediumy + h){
-					medium.decrement();
-					old.increment();
-				}
-			}
-
-			else j = 1;
-			break;
+		else if (x > 200 && x < 1200 && y > 875 && y < 975) {
+			j = 1;
+		};
+		break;
 			
 
 		case SDL_QUIT:

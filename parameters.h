@@ -12,12 +12,8 @@ const int l1 = 3 * h;
 const int l2 = 2 * h;
 const int l2bis = 3 * h;
 const int l3 = h;
-//const int marginLeft = 200;
-//const int marginTop = 100;
 
 
-const int c = 2 * h;
-const int C = 2 * c;
 
 
 
@@ -61,13 +57,6 @@ class parameters
 {
 private:
 	SDL_Surface* _screen;
-	SDL_Surface* _nameSurface;
-	SDL_Surface* _valueSurface;
-	SDL_Surface* _buttonP;
-	SDL_Surface* _buttonPP;
-	SDL_Surface* _buttonM;
-	SDL_Surface* _buttonMM;
-	parameters* _parameter;
 	long int _value;
 	int _x;
 	int _y;
@@ -77,14 +66,13 @@ private:
 	Uint32 _color;
 
 public:
-	parameters(SDL_Surface* screen, SDL_Surface* nameSurface, SDL_Surface* valueSurface, SDL_Surface* buttonP,
-		SDL_Surface* buttonPP, SDL_Surface* buttonM, SDL_Surface* buttonMM, long int value, int x, int y, int max, int min, int delta, Uint32 color);
+	parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color);
 	~parameters();
-	void initParameters();
 	void applyValue();
 	void removeValue();
 	void increment();
 	void decrement();
-
+	bool checkIncrement();
+	bool checkDecrement();
 };
 
