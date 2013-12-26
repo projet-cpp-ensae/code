@@ -1,0 +1,10 @@
+In this model, two contagious diseases are considered: disease1 and disease2.
+All individuals are susceptibles to be catch both diseases. 
+Virus transmissions are only possible in the houses (not in the streets). An individual, in a house with disease1 carriers (or disease2 carriers), 
+has a risk to catch the disease: the risk is represented by the following probabilities.
+
+Disease1: All individuals can catch disease1. Individuals' resistances to disease1 depend on their age categories: the probability to catch disease1
+and the duration of illness depend on the age category the individual belongs to.
+
+Disease2: Only medium-age individuals have a risk to catch disease2. Disease2 can only be transmitted from a man to a woman or from a woman to a man.
+	Disease2 is not curable.
