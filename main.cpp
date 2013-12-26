@@ -52,6 +52,147 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) 
 }
 /**************************************************************************************************************************************/
 
+void changeDiseasesParameters(){
+	int j = 0;
+	long d1YoungProbaValue = 20;
+	long d1MediumProbaValue = 15;
+	long d1OldProbaValue = 25;
+	long d1YoungDurationValue = 30;
+	long d1MediumDurationValue = 10;
+	long d1OldDurationValue = 20;
+	long d2MediumProbaValue = 1;
+
+	int d1YoungProbax = 950; int d1YoungProbay = 250;
+	int d1MediumProbax = 250; int d1MediumProbay = 325;
+	int d1OldProbax = 250; int d1OldProbay = 400;
+	int d1YoungDurationx = 250; int d1YoungDurationy = 500;
+	int d1MediumDurationx = 250; int d1MediumDurationy = 575;
+	int d1OldDurationx = 250; int d1OldDurationy = 650;
+	int d2MediumProbax = 250; int d2MediumProbay = 750;
+
+	parameters d1YoungProba(screen, d1YoungProbaValue, d1YoungProbax, d1YoungProbay, 100, 0, 500, 1, 0xffff00, 1);
+	parameters d1MediumProba(screen, d1MediumProbaValue, d1MediumProbax, d1MediumProbay, 100, 0, 500, 1, 0xffff00, 1);
+	parameters d1OldProba(screen, d1OldProbaValue, d1OldProbax, d1OldProbay, 100, 0, 500, 1, 0xffff00, 1);
+	parameters d1YoungDuration(screen, d1YoungDurationValue, d1YoungDurationx, d1YoungDurationy, 100, 0, 500, 1, 0xffff00, 1);
+	parameters d1MediumDuration(screen, d1MediumDurationValue, d1MediumDurationx, d1MediumDurationy, 100, 0, 500, 1, 0xffff00, 1);
+	parameters d1OldDuration(screen, d1OldDurationValue, d1OldDurationx, d1OldDurationy, 100, 0, 500, 1, 0xffff00, 1);
+	parameters d2MediumProba(screen, d2MediumProbaValue, d2MediumProbax, d2MediumProbay, 100, 0, 500, 1, 0xffff00, 1);
+
+	d1YoungProba.applyValue();
+	d1MediumProba.applyValue();
+	d1OldProba.applyValue();
+	d1YoungDuration.applyValue();
+	d1MediumDuration.applyValue();
+	d1OldDuration.applyValue();
+	d2MediumProba.applyValue();
+
+	while (j == 0){
+		SDL_Event event;
+		int x, y;
+		do
+		SDL_WaitEvent(&event);
+		while (event.type == SDL_MOUSEMOTION);
+
+		switch (event.type)
+		{
+		case SDL_MOUSEBUTTONDOWN:
+			x = event.button.x;
+			y = event.button.y;
+			if (y < 875){
+				//Bloc disease1 proba.
+				if (x > d1YoungProbax + l1 + l2 && x < d1YoungProbax + l1 + l2 + l3){
+					if (y > d1YoungProbay && y < d1YoungProbay + h0){
+						if (d1YoungProba.checkIncrement() == 1){
+							d1YoungProba.increment();
+						}
+					}
+					else if (y > d1YoungProbay + h0 && y < d1YoungProbay + h){
+						if (d1YoungProba.checkDecrement() == 1){
+							d1YoungProba.decrement();
+						}
+					}
+					else if (y > d1MediumProbay && y < d1MediumProbay + h0){
+						if (d1MediumProba.checkIncrement() == 1){
+							d1MediumProba.increment();
+						}
+					}
+					else if (y > d1MediumProbay + h0 && y < d1MediumProbay + h){
+						if (d1MediumProba.checkDecrement() == 1){
+							d1MediumProba.decrement();
+						}
+					}
+					else if (y > d1OldProbay && y < d1OldProbay + h0){
+						if (d1OldProba.checkIncrement() == 1){
+							d1OldProba.increment();
+						}
+					}
+					else if (y > d1OldProbay + h0 && y < d1OldProbay + h){
+						if (d1OldProba.checkDecrement() == 1){
+							d1OldProba.decrement();
+						}
+					}
+				}
+
+				//Bloc disease1 duration.
+				else if (x > d1YoungDurationx + l1 + l2 && x < d1YoungDurationx + l1 + l2 + l3){
+					if (y > d1YoungDurationy && y < d1YoungDurationy + h0){
+						if (d1YoungDuration.checkIncrement() == 1){
+							d1YoungDuration.increment();
+						}
+					}
+					else if (y > d1YoungDurationy + h0 && y < d1YoungDurationy + h){
+						if (d1YoungDuration.checkDecrement() == 1){
+							d1YoungDuration.decrement();
+						}
+					}
+					else if (y > d1MediumDurationy && y < d1MediumDurationy + h0){
+						if (d1MediumDuration.checkIncrement() == 1){
+							d1MediumDuration.increment();
+						}
+					}
+					else if (y > d1MediumDurationy + h0 && y < d1MediumDurationy + h){
+						if (d1MediumDuration.checkDecrement() == 1){
+							d1MediumDuration.decrement();
+						}
+					}
+					else if (y > d1OldDurationy && y < d1OldDurationy + h0){
+						if (d1OldDuration.checkIncrement() == 1){
+							d1OldDuration.increment();
+						}
+					}
+					else if (y > d1OldDurationy + h0 && y < d1OldDurationy + h){
+						if (d1OldDuration.checkDecrement() == 1){
+							d1OldDuration.decrement();
+						}
+					}
+				}
+
+				else if (x > d2MediumProbax + l1 + l2 && x < d2MediumProbax + l1 + l2 + l3){
+					if (y > d2MediumProbay && y < d2MediumProbay + h0){
+						if (d2MediumProba.checkIncrement() == 1){
+							d2MediumProba.increment();
+						}
+					}
+					else if (y > d2MediumProbay + h0 && y < d2MediumProbay + h){
+						if (d2MediumProba.checkDecrement() == 1){
+							d2MediumProba.decrement();
+						}
+					}
+				}
+			}
+			else if (x > 200 && x < 1200 && y > 875 && y < 975) {
+				j = 1;
+			};
+			break;
+
+
+		case SDL_QUIT:
+			exit(EXIT_SUCCESS);
+			break;
+		}
+	}
+}
+
 
 
 
@@ -60,7 +201,7 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) 
 
 
 
-void changeParameter(){
+void changePopulationParameter(){
 	int j = 0;
 	long populationValue = 10000;
 	long infectives1Value = 48;
@@ -241,11 +382,12 @@ int main(int argc, char* args[]) {
 
 	initSDL();
 	do{
-		//pour tester les parametres
-		//startButton = load_image("images\\startButton.bmp");
 		parametersBackground = load_image("images\\parametersImages\\parametersBackground.bmp");
 		apply_surface(0, 0, parametersBackground, screen);
-		changeParameter();
+		changePopulationParameter();
+		diseasesBackground = load_image("images\\parametersImages\\diseasesBackground.bmp");
+		apply_surface(0, 0, diseasesBackground, screen);
+		changeDiseasesParameters();
 		homeStart();
 		
 	} while (start());

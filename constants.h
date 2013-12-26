@@ -13,6 +13,7 @@ const int mapX = blockSize * 100;
 const int mapY = blockSize * 50;
 
 
+
 //Les surfaces que nous allons utiliser 
 SDL_Surface *home = NULL;
 SDL_Surface *startButton = NULL;
@@ -30,3 +31,4 @@ SDL_Surface *maison0 = NULL;
 SDL_Surface *route0 = NULL;
 
 SDL_Surface *parametersBackground = NULL;
+SDL_Surface *diseasesBackground = NULL;
