@@ -12,7 +12,7 @@ const int screenBPP = 32; //bits per pixel
 const int mapX = blockSize * 100;
 const int mapY = blockSize * 50;
 
-
+Uint32 figuresColor = 0xffff00;
 
 //Les surfaces que nous allons utiliser 
 SDL_Surface *home = NULL;
