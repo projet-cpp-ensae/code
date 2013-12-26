@@ -1,7 +1,7 @@
 #include "parameters.h"
 
 
-parameters::parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color)
+parameters::parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color, bool rate)
 {
 	_screen = screen;
 	_value = value;
@@ -11,6 +11,7 @@ parameters::parameters(SDL_Surface* screen, long int value, int x, int y, int ma
 	_min = min;
 	_delta = delta;
 	_color = color;
+	_rate = rate;
 }
 
 
@@ -24,7 +25,7 @@ parameters::~parameters()
 
 void parameters::applyValue()
 {
-	figures valueFigures(_screen, &_value, _x + l1 + e, _y + e, _color);
+	figures valueFigures(_screen, &_value, _x + l1 + e, _y + e, _color, _rate);
 	valueFigures.refresh();
 	SDL_Flip(_screen);
 }

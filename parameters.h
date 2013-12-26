@@ -64,9 +64,10 @@ private:
 	int _min;
 	int _delta;
 	Uint32 _color;
+	bool _rate;
 
 public:
-	parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color);
+	parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color, bool rate);
 	~parameters();
 	void applyValue();
 	void removeValue();
