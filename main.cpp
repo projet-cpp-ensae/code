@@ -63,10 +63,10 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) 
 void changeParameter(){
 	int j = 0;
 	long populationValue = 10000;
-	long infectives1Value = 25;
+	long infectives1Value = 48;
 	long infectives2Value = 25;
 	long infectives12Value = 25;
-	long susceptiblesValue = 25;
+	long susceptiblesValue = 2;
 	long maleValue = 50;
 	long femaleValue = 50;
 	long youngValue = 10;
@@ -80,20 +80,20 @@ void changeParameter(){
 	int susceptiblesx = 600; int susceptiblesy = 375 ;
 	int malex = 950; int maley = 425;
 	int femalex = 950; int femaley = 500;
-	int youngx = 950; int youngy = 650;
-	int mediumx = 950; int mediumy = 725;
-	int oldx = 950; int oldy = 800;
+	int youngx = 950; int youngy = 600;
+	int mediumx = 950; int mediumy = 675;
+	int oldx = 950; int oldy = 750;
 
-	parameters population(screen, populationValue, populationx, populationy, 100000, 0, 500, 0xffff00);
-	parameters infectives1(screen,  infectives1Value, infectives1x, infectives1y, 100, 0, 1, 0xffff00);
-	parameters infectives2(screen,  infectives2Value, infectives2x, infectives2y, 100, 0, 1, 0xffff00);
-	parameters infectives12(screen,  infectives12Value, infectives12x, infectives12y, 100, 0, 1, 0xffff00);
-	parameters susceptibles(screen, susceptiblesValue, susceptiblesx, susceptiblesy, 100, 0, 1, 0xffff00);
-	parameters male(screen, maleValue, malex, maley, 100, 0, 1, 0xffff00);
-	parameters female(screen, femaleValue, femalex, femaley, 100, 0, 1, 0xffff00);
-	parameters young(screen, youngValue, youngx, youngy, 100, 0, 1, 0xffff00);
-	parameters medium(screen, mediumValue, mediumx, mediumy, 100, 0, 1, 0xffff00);
-	parameters old(screen, oldValue, oldx, oldy, 100, 0, 1, 0xffff00);
+	parameters population(screen, populationValue, populationx, populationy, 100000, 0, 500, 0xffff00, 0);
+	parameters infectives1(screen,  infectives1Value, infectives1x, infectives1y, 100, 0, 1, 0xffff00,1);
+	parameters infectives2(screen,  infectives2Value, infectives2x, infectives2y, 100, 0, 1, 0xffff00,1);
+	parameters infectives12(screen,  infectives12Value, infectives12x, infectives12y, 100, 0, 1, 0xffff00,1);
+	parameters susceptibles(screen, susceptiblesValue, susceptiblesx, susceptiblesy, 100, 0, 1, 0xffff00,1);
+	parameters male(screen, maleValue, malex, maley, 100, 0, 1, 0xffff00,1);
+	parameters female(screen, femaleValue, femalex, femaley, 100, 0, 1, 0xffff00,1);
+	parameters young(screen, youngValue, youngx, youngy, 100, 0, 1, 0xffff00,1);
+	parameters medium(screen, mediumValue, mediumx, mediumy, 100, 0, 1, 0xffff00,1);
+	parameters old(screen, oldValue, oldx, oldy, 100, 0, 1, 0xffff00,1);
 
 
 	population.applyValue();
@@ -243,7 +243,7 @@ int main(int argc, char* args[]) {
 	do{
 		//pour tester les parametres
 		//startButton = load_image("images\\startButton.bmp");
-		parametersBackground = load_image("images\\parametersImages\\parametersBackground2.bmp");
+		parametersBackground = load_image("images\\parametersImages\\parametersBackground.bmp");
 		apply_surface(0, 0, parametersBackground, screen);
 		changeParameter();
 		homeStart();
@@ -254,7 +254,7 @@ int main(int argc, char* args[]) {
 		ongoingBackground();
 
 		long day_value = 0;
-		figures dayFigures(screen, &day_value, 100, 100, 0xffff00); //nombre=compteur, x=10, y=410, couleur=0xffff00
+		figures dayFigures(screen, &day_value, 100, 100, 0xffff00, 0); //nombre=compteur, x=10, y=410, couleur=0xffff00
 
 		int x0 = 150 * blockSize;
 		int y0 = 100 * blockSize;

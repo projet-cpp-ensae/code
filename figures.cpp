@@ -39,7 +39,7 @@ bool bar[10][7] = { { 1, 1, 1, 1, 1, 1, 0 },
 
 
 
-figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color)
+figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color, bool rate)
 {
 	if (*number>999999) {
 		fprintf(stderr, "nombre trop grand !!\n");
@@ -50,6 +50,7 @@ figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 col
 	_x = x;
 	_y = y;
 	_color = color;
+	_rate = rate;
 
 	//On definit les 7 barres pour construire l'affichage d'un chiffre.
 	//Voir la fonction defRect.
@@ -60,13 +61,16 @@ figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 col
 	defRect(R[4], _x, _y + L + H, L, H);
 	defRect(R[5], _x, _y, L, H + L);
 	defRect(R[6], _x, _y + L + H, H, L);
+	defRect(point, _x , _y + 2 * H + L, L, L);
 
 	//On récupère tous les chiffres qui composent le nombre: number.
 	recalculate();
 
 }
 
-void figures::refresh()
+
+//refreshInt() permet d'afficher un entier.
+void figures::refreshInt()
 {
 	//On récupère tous les chiffres qui composent le nombre: number.
 	recalculate();
@@ -96,10 +100,38 @@ void figures::refresh()
 	for (int l = 0; l < shift; l++)						//Les barres ont été décalées shift fois.
 	for (int k = 0; k <= 6; k++) R[k].x -= H + 4 * L;	//A chaque fois, chaque barre a été décalée de H + 4 * L.
 
-
-
-
 }
+
+
+//refresh() permet d'afficher les entiers et aussi les taux de probabilités 0.25 ....
+void figures::refresh()
+{
+	//Si c'est un taux de probabilité alors:
+	if (_rate == 1){	
+		//Si c'est strictement inferieur à 10 (ie 0.10) alors on ajoute un ".0" avant d'écrire le nombre.
+		if (*_number < 10){
+			SDL_FillRect(_screen, &point, _color);
+			for (int j = 0; j <= 6; j++) R[j].x += 3 * L;
+			for (int j = 0; j <= 6; j++) if (bar[0][j]) { SDL_FillRect(_screen, &R[j], _color);}
+			for (int j = 0; j <= 6; j++) R[j].x += H + 4 * L;
+			refreshInt();
+			for (int j = 0; j <= 6; j++) R[j].x -= H + 4 * L;
+			for (int j = 0; j <= 6; j++) R[j].x -= 3 * L;
+		}
+		//Sinon on ajoute seulement un "." avant d'écrire le nombre.
+		else{
+			SDL_FillRect(_screen, &point, _color);
+			for (int j = 0; j <= 6; j++) R[j].x += 3 * L;
+			refreshInt();
+			for (int j = 0; j <= 6; j++) R[j].x -= 3 * L;
+		}
+	}
+	//Sinon, c'est un nombre et on affiche juste le nombre (avec refreshInt())
+	else{
+		refreshInt();
+	}
+}
+
 
 
 //La fonction remove() efface l'affichage d'un nombre.

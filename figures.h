@@ -20,16 +20,19 @@ private:
 	int digit[6];											//digit[i] est le chiffre de la puissance 10^i.
 	SDL_Surface* _screen;									//screen est la surface où doit être affiché le nombre.
 	int _x, _y;												//Ce sont les coordonnées du point le plus haut à gauche du nombre à afficher.			
-	SDL_Rect R[7];											//Il nous faut sept surface rectangulaires pour les 7 barres d'un chiffres.
+	SDL_Rect R[7];											//Il nous faut sept surfaces rectangulaires pour les 7 barres d'un chiffres.
+	SDL_Rect point;
 	Uint32 _color;											//color est la couleur utilisée.
+	bool _rate;
 
 	void recalculate();										//Voir figures.cpp.
 	long int power10(int exponent);							//Voir figures.cpp.
 	void defRect(SDL_Rect& R, int x, int y, int w, int h);	//Voir figures.cpp.
 
 public:
-	figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color);
+	figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color, bool rate);
 	~figures();
+	void refreshInt();											//Voir figures.cpp.
 	void refresh();											//Voir figures.cpp.
 	void remove();											//Voir figures.cpp.
 	void operator --(int);									//Voir figures.cpp.
