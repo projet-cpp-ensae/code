@@ -1,4 +1,4 @@
-Please select the parameters:
+Please enter the initial values for the following parameters:
 	
 	Population 	The size of the population.
 	
