@@ -1,11 +1,17 @@
-//On construit une classe "figures" pour afficher des nombres sur l'écran.
-//On explique au début du figures.cpp comment est représenté un chiffre.
+/*
+On construit une classe "figures" pour afficher des nombres sur l'écran.
+Le nombre à afficher est soit un entier, soit un taux (de probabilité) entre  0 et 1 avec deux chiffres après la virgule.
+Que ce soit un entier ou un taux, le champs correspondant (_number) est un long int.
+C'est le champs bool _rate qui distingue les entiers (_rate=0) des taux (_rate=1).
+On explique au début du figures.cpp comment est représenté un chiffre.
+*/
 
-#ifndef _figures
+
+#ifndef FIGURES_H
 #include <stdlib.h> //pour exit et atexit
 #include <stdio.h>
 #include <sdl.h>
-#define _figures
+#define FIGURES_H
 #endif
 
 //Comme expliqué dans le figures.cpp, un chiffre est construit par un assemblage de barres.
@@ -16,27 +22,30 @@ const int L = 2;
 class figures
 {
 private:
-	long int* _number;										//number est le nombre à afficher. 
-	int digit[6];											//digit[i] est le chiffre de la puissance 10^i.
-	SDL_Surface* _screen;									//screen est la surface où doit être affiché le nombre.
+	long int* _number;										//Le nombre à afficher. 
+	int digit[6];											//Le chiffre de la puissance 10^i.
+	SDL_Surface* _screen;									//Laa surface où doit être affiché le nombre.
 	int _x, _y;												//Ce sont les coordonnées du point le plus haut à gauche du nombre à afficher.			
 	SDL_Rect R[7];											//Il nous faut sept surfaces rectangulaires pour les 7 barres d'un chiffres.
-	SDL_Rect point;
-	Uint32 _color;											//color est la couleur utilisée.
-	bool _rate;
+	SDL_Rect point;											//Surface pour afficher une virgule (pour les nombres décimaux).
+	Uint32 _color;											//La couleur utilisée pour les chiffres.
+	bool _rate;												//Indique si le nombre est un entier ou un taux (de probabilité).
+															//Un taux est un décimal entre 0 et 1 et doit donc être précédé d'une virgule.
 
-	void recalculate();										//Voir figures.cpp.
-	long int power10(int exponent);							//Voir figures.cpp.
-	void defRect(SDL_Rect& R, int x, int y, int w, int h);	//Voir figures.cpp.
+	//Voir figures.cpp pour les commentaires.
+	void recalculate();										
+	long int power10(int exponent);							
+	void defRect(SDL_Rect& R, int x, int y, int w, int h);	
 
 public:
 	figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color, bool rate);
 	~figures();
-	void refreshInt();											//Voir figures.cpp.
-	void refresh();											//Voir figures.cpp.
-	void remove();											//Voir figures.cpp.
-	void operator --(int);									//Voir figures.cpp.
-	void operator ++(int);									//Voir figures.cpp.
+	//Voir figures.cpp pour les commentaires.
+	void refreshInt();										
+	void refresh();											
+	void remove();											
+	void operator --(int);									
+	void operator ++(int);									
 };
 
 

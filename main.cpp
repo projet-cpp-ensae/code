@@ -394,6 +394,14 @@ void changeDiseasesParameters(){
 int main(int argc, char* args[]) {
 
 	initSDL();
+
+	title = load_image("images\\title.bmp");
+	apply_surface(0, 0, title, screen);
+	SDL_Flip(screen);
+	SDL_Delay(1000);
+
+
+
 	do{
 			parametersBackground = load_image("images\\parametersImages\\parametersBackground.bmp");
 			apply_surface(0, 0, parametersBackground, screen);
