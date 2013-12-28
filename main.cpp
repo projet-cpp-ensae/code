@@ -63,33 +63,36 @@ void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) 
 
 void changePopulationParameter(){
 	int j = 0;
+	long durationValue = 10000;
 	long populationValue = 10000;
 	long infectives1Value = 48;
 	long infectives2Value = 25;
-	long infectives12Value = 25;
-	long susceptiblesValue = 2;
+	long susceptibles1Value = 25;
+	long susceptibles2Value = 2;
 	long maleValue = 50;
 	long femaleValue = 50;
 	long youngValue = 10;
 	long mediumValue = 80;
 	long oldValue = 10;
 
-	int populationx = 200; int populationy = 100 ;
-	int infectives1x = 600; int infectives1y = 150 ;
-	int infectives2x = 600; int  infectives2y =225 ;
-	int infectives12x = 600; int infectives12y = 300 ;
-	int susceptiblesx = 600; int susceptiblesy = 375 ;
-	int malex = 950; int maley = 425;
-	int femalex = 950; int femaley = 500;
-	int youngx = 950; int youngy = 600;
-	int mediumx = 950; int mediumy = 675;
-	int oldx = 950; int oldy = 750;
+	int durationx = 525; int durationy = 250;
+	int populationx = 525; int populationy = 175 ;
+	int infectives1x = 550; int infectives1y = 425 ;
+	int infectives2x = 550; int  infectives2y =500 ;
+	int susceptibles1x = 550; int susceptibles1y = 575 ;
+	int susceptibles2x = 550; int susceptibles2y = 650 ;
+	int malex = 150; int maley = 425;
+	int femalex = 150; int femaley = 500;
+	int youngx = 950; int youngy = 425;
+	int mediumx = 950; int mediumy = 500;
+	int oldx = 950; int oldy = 575;
 
 	parameters population(screen, populationValue, populationx, populationy, 100000, 0, 500, figuresColor, 0);
+	parameters duration(screen, durationValue, durationx, durationy, 100000, 0, 500, figuresColor, 0);
 	parameters infectives1(screen, infectives1Value, infectives1x, infectives1y, 100, 0, 1, figuresColor, 1);
 	parameters infectives2(screen, infectives2Value, infectives2x, infectives2y, 100, 0, 1, figuresColor, 1);
-	parameters infectives12(screen, infectives12Value, infectives12x, infectives12y, 100, 0, 1, figuresColor, 1);
-	parameters susceptibles(screen, susceptiblesValue, susceptiblesx, susceptiblesy, 100, 0, 1, figuresColor, 1);
+	parameters susceptibles1(screen, susceptibles1Value, susceptibles1x, susceptibles1y, 100, 0, 1, figuresColor, 1);
+	parameters susceptibles2(screen, susceptibles2Value, susceptibles2x, susceptibles2y, 100, 0, 1, figuresColor, 1);
 	parameters male(screen, maleValue, malex, maley, 100, 0, 1, figuresColor, 1);
 	parameters female(screen, femaleValue, femalex, femaley, 100, 0, 1, figuresColor, 1);
 	parameters young(screen, youngValue, youngx, youngy, 100, 0, 1, figuresColor, 1);
@@ -98,10 +101,12 @@ void changePopulationParameter(){
 
 
 	population.applyValue();
+	duration.applyValue();
 	infectives1.applyValue();
+
 	infectives2.applyValue();
-	infectives12.applyValue();
-	susceptibles.applyValue();
+	susceptibles1.applyValue();
+	susceptibles2.applyValue();
 	male.applyValue();
 	female.applyValue();
 	young.applyValue();
@@ -120,9 +125,11 @@ void changePopulationParameter(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
-			if (y < 875){
-				//Bloc population.
+
+			//Bloc supérieur
+			if (y < maley){
 				if (x > populationx + l1 + l2bis && x < populationx + l1 + l2bis + l3){
+					//Bloc population
 					if (y > populationy && y < populationy + h0){
 						if (population.checkIncrement() == 1){
 							population.increment();
@@ -133,50 +140,52 @@ void changePopulationParameter(){
 							population.decrement();
 						}
 					}
+					//Bloc duration
+					else if (y > durationy && y < durationy + h0){
+						if (duration.checkIncrement() == 1){
+							duration.increment();
+						}
+					}
+					else if (y > durationy + h0 && y < durationy + h){
+						if (duration.checkDecrement() == 1){
+							duration.decrement();
+						}
+					}
 				}
+			}
 
-				//Bloc infectives1, infectives2, infectives12 et susceptibles.
-				else if (x > infectives1x + l1 + l2 && x < infectives1x + l1 + l2 + l3){
+			//Bloc inférieur
+			else if (y> maley && y<900){
+				//Bloc infectives1, infectives2, susceptibles1, susceptibles2
+				if (x > infectives1x + l1 + l2 && x < infectives1x + l1 + l2 + l3){
 					if (y > infectives1y && y < infectives1y + h0){
-						if (infectives1.checkIncrement() == 1 && susceptibles.checkDecrement() == 1){
+						if (infectives1.checkIncrement() == 1 && susceptibles1.checkDecrement() == 1){
 							infectives1.increment();
-							susceptibles.decrement();
+							susceptibles1.decrement();
 						}
 					}
 					else if (y > infectives1y + h0 && y < infectives1y + h){
-						if (infectives1.checkDecrement() == 1 && susceptibles.checkIncrement() == 1){
+						if (infectives1.checkDecrement() == 1 && susceptibles1.checkIncrement() == 1){
 							infectives1.decrement();
-							susceptibles.increment();
+							susceptibles1.increment();
 						}
 					}
 					else if (y > infectives2y && y < infectives2y + h0){
-						if (infectives2.checkIncrement() == 1 && susceptibles.checkDecrement() == 1){
+						if (infectives2.checkIncrement() == 1 && susceptibles2.checkDecrement() == 1){
 							infectives2.increment();
-							susceptibles.decrement();
+							susceptibles2.decrement();
 						}
 					}
 					else if (y > infectives2y + h0 && y < infectives2y + h){
-						if (infectives2.checkDecrement() == 1 && susceptibles.checkIncrement() == 1){
+						if (infectives2.checkDecrement() == 1 && susceptibles2.checkIncrement() == 1){
 							infectives2.decrement();
-							susceptibles.increment();
-						}
-					}
-					else if (y > infectives12y && y < infectives12y + h0){
-						if (infectives12.checkIncrement() == 1 && susceptibles.checkDecrement() == 1){
-							infectives12.increment();
-							susceptibles.decrement();
-						}
-					}
-					else if (y > infectives12y + h0 && y < infectives12y + h){
-						if (infectives12.checkDecrement() == 1 && susceptibles.checkIncrement() == 1){
-							infectives12.decrement();
-							susceptibles.increment();
+							susceptibles2.increment();
 						}
 					}
 				}
-			
+
 				//Bloc male et female.
-				else if (x > malex + l1 + l2 && x < malex + l1 + l2 + l3 && y < youngy){
+				else if (x > malex + l1 + l2 && x < malex + l1 + l2 + l3){
 					if (y > maley && y < maley + h0){
 						if (male.checkIncrement() == 1 && female.checkDecrement() == 1){
 							male.increment();
@@ -192,12 +201,12 @@ void changePopulationParameter(){
 				}
 
 				//Bloc young, medium and old.
-				else if (x > youngx + l1 + l2 && x < youngx + l1 + l2 + l3 && y > youngy){
-					 if (y > youngy && y < youngy + h0){
-						 if (young.checkIncrement() == 1 && old.checkDecrement() == 1) {
-							 young.increment();
-							 old.decrement();
-						 }
+				else if (x > youngx + l1 + l2 && x < youngx + l1 + l2 + l3){
+					if (y > youngy && y < youngy + h0){
+						if (young.checkIncrement() == 1 && old.checkDecrement() == 1) {
+							young.increment();
+							old.decrement();
+						}
 					}
 					else if (y > youngy + h0 && y < youngy + h){
 						if (young.checkDecrement() == 1 && old.checkIncrement() == 1) {
@@ -220,7 +229,7 @@ void changePopulationParameter(){
 				}
 			}
 
-		else if (x > 200 && x < 1200 && y > 875 && y < 975) {
+		else if (x > 1000 && x < 1300 && y > 900 && y < 950) {
 			j = 1;
 		};
 		break;
@@ -284,8 +293,8 @@ void changeDiseasesParameters(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
-			if (y < 875){
-				
+			if (y < 900){
+
 				if (x > d1YoungProbax + l1 + l2 && x < d1YoungProbax + l1 + l2 + l3){
 					//Bloc disease1 proba.
 					if (y > d1YoungProbay && y < d1YoungProbay + h0){
@@ -318,9 +327,9 @@ void changeDiseasesParameters(){
 							d1OldProba.decrement();
 						}
 					}
-				
 
-				//Bloc disease1 duration.
+
+					//Bloc disease1 duration.
 					if (y > d1YoungDurationy && y < d1YoungDurationy + h0){
 						if (d1YoungDuration.checkIncrement() == 1){
 							d1YoungDuration.increment();
@@ -351,9 +360,9 @@ void changeDiseasesParameters(){
 							d1OldDuration.decrement();
 						}
 					}
-				
 
-				//Bloc disease2 proba
+
+					//Bloc disease2 proba
 					if (y > d2MediumProbay && y < d2MediumProbay + h0){
 						if (d2MediumProba.checkIncrement() == 1){
 							d2MediumProba.increment();
@@ -366,11 +375,10 @@ void changeDiseasesParameters(){
 					}
 				}
 			}
-			else if (x > 200 && x < 1200 && y > 875 && y < 975) {
-				j = 1;
-			};
+			if (x > 1000 && x < 1300 && y > 900 && y < 950) {
+					j = 1;
+			}
 			break;
-
 
 		case SDL_QUIT:
 			exit(EXIT_SUCCESS);
@@ -387,13 +395,13 @@ int main(int argc, char* args[]) {
 
 	initSDL();
 	do{
-		parametersBackground = load_image("images\\parametersImages\\parametersBackground.bmp");
-		apply_surface(0, 0, parametersBackground, screen);
-		changePopulationParameter();
-		diseasesBackground = load_image("images\\parametersImages\\diseasesBackground.bmp");
-		apply_surface(0, 0, diseasesBackground, screen);
-		changeDiseasesParameters();
-		homeStart();
+			parametersBackground = load_image("images\\parametersImages\\parametersBackground.bmp");
+			apply_surface(0, 0, parametersBackground, screen);
+			changePopulationParameter();
+			diseasesBackground = load_image("images\\parametersImages\\diseasesBackground.bmp");
+			apply_surface(0, 0, diseasesBackground, screen);
+			changeDiseasesParameters();
+			homeStart();
 		
 	} while (start());
 
@@ -401,7 +409,7 @@ int main(int argc, char* args[]) {
 		ongoingBackground();
 
 		long day_value = 0;
-		figures dayFigures(screen, &day_value, 100, 100, figuresColor, 0); //nombre=compteur, x=10, y=410, couleur=figuresColor
+		figures dayFigures(screen, &day_value, 50 + l1 + e, 250 + e, figuresColor, 0); //nombre=compteur, x=10, y=410, couleur=figuresColor
 
 		int x0 = 150 * blockSize;
 		int y0 = 100 * blockSize;
@@ -446,7 +454,7 @@ int main(int argc, char* args[]) {
 			}
 			****************************************************/
 
-			day_value++; //ca incremente aussi dayFigures, cette boucle tourne une fois par jour
+			day_value++ ; //ca incremente aussi dayFigures, cette boucle tourne une fois par jour
 
 			while (SDL_GetTicks()<day + 50) SDL_Delay(1);
 
