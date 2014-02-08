@@ -23,11 +23,10 @@ Chaque morceau étant une des sept barres représentées ci-dessous.
 
 
 /*
-Dans le code,
-Un chiffre est représenté par une table de 7 bool.
+Dans le code,un chiffre est représenté par une table de 7 bool.
 Chaque bool représente une barre parmi les 7 représentées ci-dessus.
-si bool = 1 alors la barre correspondante est affichée
-si bool = 0 alors la barre correspondante n'est pas affichée
+si bool = 1 alors la barre correspondante est affichée.
+si bool = 0 alors la barre correspondante n'est pas affichée.
 */
 
 
@@ -46,9 +45,9 @@ bool bar[10][7] = {
 
 
 
-figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color, bool rate)
+figures::figures(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate)
 {
-	if (*number>999999) {
+	if (number>999999) {
 		fprintf(stderr, "nombre trop grand !!\n");
 	}
 
@@ -60,8 +59,7 @@ figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 col
 	_color = color;
 	_rate = rate;
 
-	//On definit les 7 barres pour construire l'affichage d'un chiffre.
-	//Voir la fonction defRect.
+	//On definit les 7 barres pour construire l'affichage d'un chiffre (voir la fonction defRect).
 	defRect(R[0], _x, _y, H, L);
 	defRect(R[1], _x + H - L, _y, L, H + L);
 	defRect(R[2], _x + H - L, _y + H + L, L, H);
@@ -71,13 +69,13 @@ figures::figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 col
 	defRect(R[6], _x, _y + L + H, H, L);
 	defRect(point, _x , _y + 2 * H + L, L, L);
 
-	//recalculate() récupère tous les chiffres qui composent le nombre: _number.
+	//recalculate() récupère tous les chiffres qui composent le nombre: number.
 	recalculate();
 
 }
 
 
-//refreshInt() permet d'afficher un entier.
+//refreshInt permet d'afficher un entier.
 void figures::refreshInt()
 {
 	//recalculate() récupère tous les chiffres qui composent le nombre: number.
@@ -119,7 +117,7 @@ void figures::refresh()
 	//Si c'est un taux de probabilité alors:
 	if (_rate == 1){	
 		//Si c'est strictement inferieur à 10% (ie 0.10) alors on ajoute un ".0" avant d'écrire le nombre (_number = 8 par exemple). Et on obtient bien .08.
-		if (*_number < 10){
+		if (_number < 10){
 
 			//On remplit la surface de la virgule avec la couleur _color.
 			SDL_FillRect(_screen, &point, _color);		
@@ -158,6 +156,7 @@ void figures::refresh()
 	else{
 		refreshInt();
 	}
+	SDL_Flip(_screen);
 }
 
 
@@ -171,30 +170,28 @@ void figures::remove()
 	_color = C;			//On pense à remettre la couleur choisie pour afficher les prochains nombres. 
 }
 
-//L'operator -- permet de décrementer un nombre affiché (Un nombre affiché étant un figures et non un int).
-void figures::operator --(int)
+
+//Decrement permet de décrementer un nombre affiché (Un nombre affiché étant un figures et non un int).
+void figures::decrement()
 {
-	(*_number)--; //Il suffit de décrementer le nombre number.
+	(_number)--; //Il suffit de décrementer le nombre number.
 	refresh();	//Puis de l'afficher.
 }
 
-//L'operator ++ permet d'incrémenter un nombre affiché (Un nombre affiché étant un figures et non un int).
-void figures::operator ++(int)
+//Increment permet d'incrémenter un nombre affiché (Un nombre affiché étant un figures et non un int).
+void figures::increment()
 {
-	(*_number)++;	//Il suffit d'incrementer le nombre number.
+	(_number)++;	//Il suffit d'incrementer le nombre number.
 	refresh();		//Puis de l'afficher.
 }
 
 
 
 //recalculate() récupère tous les chiffres qui composent le nombre: _number.
-//Si on considère _number=edcba.
-//La fonction recalculate récupère:
-//digit[0] = a
-//digit[1] = b ...
+//Si on considère _number=edcba, la fonction recalculate récupère: digit[0] = a, digit[1] = b ...
 void figures::recalculate()
 {
-	int coeff = 0, temp = *_number;		//On rappelle que _number est le nombre à afficher.
+	int coeff = 0, temp = _number;		//On rappelle que _number est le nombre à afficher.
 
 	for (int i = 5; i >= 0; i--)		//On se limite au maximum à 99 999 donc on a au maximum 5 chiffres.
 	{
@@ -225,6 +222,11 @@ long int figures::power10(int exponent)
 	else return 10 * figures::power10(exponent - 1);
 }
 
+
+long int figures::getNumber()
+{
+	return _number;
+}
 
 
 figures::~figures()

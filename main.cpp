@@ -1,118 +1,54 @@
-#include "parameters.h"
+
 #include <fstream>
 #include <string>
+#include <vector>
+
+#include "parameters.h"
+#include "square.h"
+#include "images.h"
 
 
-#include "constants.h"
-
-
-
-
-SDL_Event event; //La structure d'événements qu'on va utiliser
-
-//pour le compteur du nb de jours écoulés
-int day = 0,               //Variable pour gérer la fréquence d'affichage
-dayZero;                   //Date à laquelle le programme se lance
-long day_value = 0;
-
-
-/***************************************************	DECLARATION DES FONCTIONS	***************************************************/
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination);
-void initSDL();
-void homeStart();
-bool start();
-void ongoingBackground();
-void endBackground();
-bool end();
-float freq(int dayStart, int dayEnd, int nbrUpdate);
-float freq(int dayStart, int dayEnd, int nbrUpdate);//fréquence réelle
-//bool chartPage();
-/**************************************************************************************************************************************/
-
-
-
-/**********************************************		POUR AFFICHER DES IMAGES SUR L'ECRAN	*******************************************/
-SDL_Surface *load_image(std::string filename)
-{
-	SDL_Surface* loadedImage = NULL;						//Surface tampon qui nous servira pour charger l'image
-	SDL_Surface* optimizedImage = NULL;						//L'image optimisée qu'on va utiliser 
-	loadedImage = SDL_LoadBMP(filename.c_str());			//Chargement de l'image
-	if (loadedImage != NULL) {								//Si le chargement se passe bien 
-		optimizedImage = SDL_DisplayFormat(loadedImage);	//Création de l'image optimisée
-		SDL_FreeSurface(loadedImage);						//Libération de l'ancienne image
-	}
-	return optimizedImage;									//On retourne l'image optimisée 
-}
-
-void apply_surface(int x, int y, SDL_Surface* source, SDL_Surface* destination) {
-	SDL_Rect offset;
-	offset.x = x;
-	offset.y = y;
-	SDL_BlitSurface(source, NULL, destination, &offset);	//On blitte la surface 
-}
-/**************************************************************************************************************************************/
-
-
-
-
-
+SDL_Event event;				//La structure d'événements qu'on va utiliser
+SDL_Surface *screen = NULL;
+Uint32 figuresColor = 0xffff00;	//La couleur pour les chiffres.
 
 /**********************************************		POUR CHANGER LES PARAMETRES	*******************************************/
 
-
-
 void changePopulationParameter(){
-	int j = 0;
-	long durationValue = 10000;
-	long populationValue = 10000;
-	long infectives1Value = 48;
-	long infectives2Value = 25;
-	long susceptibles1Value = 25;
-	long susceptibles2Value = 2;
-	long maleValue = 50;
-	long femaleValue = 50;
-	long youngValue = 10;
-	long mediumValue = 80;
-	long oldValue = 10;
-
-	int durationx = 525; int durationy = 250;
-	int populationx = 525; int populationy = 175 ;
-	int infectives1x = 550; int infectives1y = 425 ;
-	int infectives2x = 550; int  infectives2y =500 ;
-	int susceptibles1x = 550; int susceptibles1y = 575 ;
-	int susceptibles2x = 550; int susceptibles2y = 650 ;
-	int malex = 150; int maley = 425;
-	int femalex = 150; int femaley = 500;
-	int youngx = 950; int youngy = 425;
-	int mediumx = 950; int mediumy = 500;
-	int oldx = 950; int oldy = 575;
-
-	parameters population(screen, populationValue, populationx, populationy, 100000, 0, 500, figuresColor, 0);
-	parameters duration(screen, durationValue, durationx, durationy, 100000, 0, 500, figuresColor, 0);
-	parameters infectives1(screen, infectives1Value, infectives1x, infectives1y, 100, 0, 1, figuresColor, 1);
-	parameters infectives2(screen, infectives2Value, infectives2x, infectives2y, 100, 0, 1, figuresColor, 1);
-	parameters susceptibles1(screen, susceptibles1Value, susceptibles1x, susceptibles1y, 100, 0, 1, figuresColor, 1);
-	parameters susceptibles2(screen, susceptibles2Value, susceptibles2x, susceptibles2y, 100, 0, 1, figuresColor, 1);
-	parameters male(screen, maleValue, malex, maley, 100, 0, 1, figuresColor, 1);
-	parameters female(screen, femaleValue, femalex, femaley, 100, 0, 1, figuresColor, 1);
-	parameters young(screen, youngValue, youngx, youngy, 100, 0, 1, figuresColor, 1);
-	parameters medium(screen, mediumValue, mediumx, mediumy, 100, 0, 1, figuresColor, 1);
-	parameters old(screen, oldValue, oldx, oldy, 100, 0, 1, figuresColor, 1);
-
-
-	population.applyValue();
-	duration.applyValue();
-	infectives1.applyValue();
-
-	infectives2.applyValue();
-	susceptibles1.applyValue();
-	susceptibles2.applyValue();
-	male.applyValue();
-	female.applyValue();
-	young.applyValue();
-	medium.applyValue();
-	old.applyValue();
 	
+	long populationValue = 10000;			long durationValue = 10000;
+	long infectives1Value = 25;				long susceptibles1Value = 75;
+	long infectives2Value = 2;				long susceptibles2Value = 98;
+	long maleValue = 50;					long femaleValue = 50;
+	long youngValue = 10;					long mediumValue = 80;				long oldValue = 10;
+
+	int populationx = 525 + l1 + e;			int populationy = 175 + e;			int durationx = 525 + l1 +  e;			int durationy = 250 + e;
+	int infectives1x = 550 + l1 + e;		int infectives1y = 425 + e ;		int susceptibles1x = 550 + l1 + e;		int susceptibles1y = 575 + e ;
+	int infectives2x = 550 + l1  + e;		int infectives2y =500 + e ;			int susceptibles2x = 550 + l1 +  e;		int susceptibles2y = 650 + e ;
+	int malex = 150 + l1 + e;				int maley = 425 + e;				int femalex = 150 + l1 + e;				int femaley = 500 + e;
+	int youngx = 950 + l1 + e;				int youngy = 425 + e;				int mediumx = 950 + l1 +  e;			int mediumy = 500 + e;
+	int oldx = 950 + l1 + e;				int oldy = 575 + e;
+
+	parameters population(screen, populationValue, populationx, populationy, figuresColor, 0, h0, l1+l2bis, 100000, 0, 500);
+	parameters duration(screen, durationValue, durationx, durationy, figuresColor, 0, h0, l1+l2bis, 100000, 0, 500);
+	parameters infectives1(screen, infectives1Value, infectives1x, infectives1y, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters infectives2(screen, infectives2Value, infectives2x, infectives2y, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters susceptibles1(screen, susceptibles1Value, susceptibles1x, susceptibles1y, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters susceptibles2(screen, susceptibles2Value, susceptibles2x, susceptibles2y, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters male(screen, maleValue, malex, maley, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters female(screen, femaleValue, femalex, femaley, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters young(screen, youngValue, youngx, youngy, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters medium(screen, mediumValue, mediumx, mediumy, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters old(screen, oldValue, oldx, oldy, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	
+
+	population.refresh();		duration.refresh();
+	infectives1.refresh();		susceptibles1.refresh();
+	infectives2.refresh();		susceptibles2.refresh();
+	male.refresh();				female.refresh();
+	young.refresh();			medium.refresh();			old.refresh();			
+
+	int j = 0;
 	while (j == 0){
 		SDL_Event event;
 		int x, y;
@@ -125,115 +61,20 @@ void changePopulationParameter(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
-
-			//Bloc supérieur
-			if (y < maley){
-				if (x > populationx + l1 + l2bis && x < populationx + l1 + l2bis + l3){
-					//Bloc population
-					if (y > populationy && y < populationy + h0){
-						if (population.checkIncrement() == 1){
-							population.increment();
-						}
-					}
-					else if (y > populationy + h0 && y < populationy + h){
-						if (population.checkDecrement() == 1){
-							population.decrement();
-						}
-					}
-					//Bloc duration
-					else if (y > durationy && y < durationy + h0){
-						if (duration.checkIncrement() == 1){
-							duration.increment();
-						}
-					}
-					else if (y > durationy + h0 && y < durationy + h){
-						if (duration.checkDecrement() == 1){
-							duration.decrement();
-						}
-					}
-				}
+	
+			if (y<900){
+				population.increment(x, y);						population.decrement(x, y);
+				duration.increment(x, y);						duration.decrement(x, y);
+				infectives1.increment(x, y, &susceptibles1);	infectives1.decrement(x, y, &susceptibles1);
+				infectives2.increment(x, y, &susceptibles2);	infectives2.decrement(x, y, &susceptibles2);
+				male.increment(x, y, &female);					male.decrement(x, y, &female);
+				young.increment(x, y, &old);					young.decrement(x, y, &old);
+				medium.increment(x, y, &old);					medium.decrement(x, y, &old);
 			}
-
-			//Bloc inférieur
-			else if (y> maley && y<900){
-				//Bloc infectives1, infectives2, susceptibles1, susceptibles2
-				if (x > infectives1x + l1 + l2 && x < infectives1x + l1 + l2 + l3){
-					if (y > infectives1y && y < infectives1y + h0){
-						if (infectives1.checkIncrement() == 1 && susceptibles1.checkDecrement() == 1){
-							infectives1.increment();
-							susceptibles1.decrement();
-						}
-					}
-					else if (y > infectives1y + h0 && y < infectives1y + h){
-						if (infectives1.checkDecrement() == 1 && susceptibles1.checkIncrement() == 1){
-							infectives1.decrement();
-							susceptibles1.increment();
-						}
-					}
-					else if (y > infectives2y && y < infectives2y + h0){
-						if (infectives2.checkIncrement() == 1 && susceptibles2.checkDecrement() == 1){
-							infectives2.increment();
-							susceptibles2.decrement();
-						}
-					}
-					else if (y > infectives2y + h0 && y < infectives2y + h){
-						if (infectives2.checkDecrement() == 1 && susceptibles2.checkIncrement() == 1){
-							infectives2.decrement();
-							susceptibles2.increment();
-						}
-					}
-				}
-
-				//Bloc male et female.
-				else if (x > malex + l1 + l2 && x < malex + l1 + l2 + l3){
-					if (y > maley && y < maley + h0){
-						if (male.checkIncrement() == 1 && female.checkDecrement() == 1){
-							male.increment();
-							female.decrement();
-						}
-					}
-					else if (y > maley + h0 && y < maley + h){
-						if (male.checkDecrement() == 1 && female.checkIncrement() == 1){
-							male.decrement();
-							female.increment();
-						}
-					}
-				}
-
-				//Bloc young, medium and old.
-				else if (x > youngx + l1 + l2 && x < youngx + l1 + l2 + l3){
-					if (y > youngy && y < youngy + h0){
-						if (young.checkIncrement() == 1 && old.checkDecrement() == 1) {
-							young.increment();
-							old.decrement();
-						}
-					}
-					else if (y > youngy + h0 && y < youngy + h){
-						if (young.checkDecrement() == 1 && old.checkIncrement() == 1) {
-							young.decrement();
-							old.increment();
-						}
-					}
-					else if (y > mediumy && y < mediumy + h0){
-						if (medium.checkIncrement() == 1 && old.checkDecrement() == 1) {
-							medium.increment();
-							old.decrement();
-						}
-					}
-					else if (y > mediumy + h0 && y < mediumy + h){
-						if (medium.checkDecrement() == 1 && old.checkIncrement() == 1) {
-							medium.decrement();
-							old.increment();
-						}
-					}
-				}
+			else if (x > 1000 && x < 1300 && y > 900 && y < 950) {
+				j = 1;
 			}
-
-		else if (x > 1000 && x < 1300 && y > 900 && y < 950) {
-			j = 1;
-		};
-		break;
-			
+			break;
 
 		case SDL_QUIT:
 			exit(EXIT_SUCCESS);
@@ -242,44 +83,31 @@ void changePopulationParameter(){
 	}
 }
 
-/**************************************************************************************************************************************/
 
-
-/******************************************		POUR CHANGER LES PARAMETRES	DES 2 MALADIES*********************************************/
 void changeDiseasesParameters(){
 	int j = 0;
-	long d1YoungProbaValue = 20;
-	long d1MediumProbaValue = 15;
-	long d1OldProbaValue = 25;
-	long d1YoungDurationValue = 30;
-	long d1MediumDurationValue = 10;
-	long d1OldDurationValue = 20;
+	long d1YoungProbaValue = 20;			long d1MediumProbaValue = 15;		long d1OldProbaValue = 25;
+	long d1YoungDurationValue = 30;			long d1MediumDurationValue = 10;	long d1OldDurationValue = 20;
 	long d2MediumProbaValue = 1;
 
-	int d1YoungProbax = 950; int d1YoungProbay = 250;
-	int d1MediumProbax = 950; int d1MediumProbay = 325;
-	int d1OldProbax = 950; int d1OldProbay = 400;
-	int d1YoungDurationx = 950; int d1YoungDurationy = 500;
-	int d1MediumDurationx = 950; int d1MediumDurationy = 575;
-	int d1OldDurationx = 950; int d1OldDurationy = 650;
-	int d2MediumProbax = 950; int d2MediumProbay = 750;
+	int d1YoungProbax = 950 + l1 + e;		int d1YoungProbay = 250 +e;			int d1MediumProbax = 950 + l1 + e;		int d1MediumProbay = 325 +e;
+	int d1OldProbax = 950 + l1 + e;			int d1OldProbay = 400 +e;
+	int d1YoungDurationx = 950 + l1 + e;	int d1YoungDurationy = 500 +e;		int d1MediumDurationx = 950 + l1 + e;	int d1MediumDurationy = 575 +e;
+	int d1OldDurationx = 950 + l1 + e;		int d1OldDurationy = 650 +e;
+	int d2MediumProbax = 950 + l1 + e;		int d2MediumProbay = 750 +e;
 
 
-	parameters d1YoungProba(screen, d1YoungProbaValue, d1YoungProbax, d1YoungProbay, 100, 0, 1, figuresColor, 1);
-	parameters d1MediumProba(screen, d1MediumProbaValue, d1MediumProbax, d1MediumProbay, 100, 0, 1, figuresColor, 1);
-	parameters d1OldProba(screen, d1OldProbaValue, d1OldProbax, d1OldProbay, 100, 0, 1, figuresColor, 1);
-	parameters d1YoungDuration(screen, d1YoungDurationValue, d1YoungDurationx, d1YoungDurationy, 100, 0, 1, figuresColor, 0);
-	parameters d1MediumDuration(screen, d1MediumDurationValue, d1MediumDurationx, d1MediumDurationy, 100, 0, 1, figuresColor, 0);
-	parameters d1OldDuration(screen, d1OldDurationValue, d1OldDurationx, d1OldDurationy, 100, 0, 1, figuresColor, 0);
-	parameters d2MediumProba(screen, d2MediumProbaValue, d2MediumProbax, d2MediumProbay, 100, 0, 1, figuresColor, 1);
+	parameters d1YoungProba(screen, d1YoungProbaValue, d1YoungProbax, d1YoungProbay, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters d1MediumProba(screen, d1MediumProbaValue, d1MediumProbax, d1MediumProbay, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters d1OldProba(screen, d1OldProbaValue, d1OldProbax, d1OldProbay, figuresColor, 1, h0, l1+l2, 100, 0, 1);
+	parameters d1YoungDuration(screen, d1YoungDurationValue, d1YoungDurationx, d1YoungDurationy, figuresColor, 0, h0, l1+l2, 100, 0, 1);
+	parameters d1MediumDuration(screen, d1MediumDurationValue, d1MediumDurationx, d1MediumDurationy, figuresColor, 0, h0, l1+l2, 100, 0, 1);
+	parameters d1OldDuration(screen, d1OldDurationValue, d1OldDurationx, d1OldDurationy, figuresColor, 0, h0, l1+l2, 100, 0, 1);
+	parameters d2MediumProba(screen, d2MediumProbaValue, d2MediumProbax, d2MediumProbay, figuresColor, 1, h0, l1+l2, 100, 0, 1);
 
-	d1YoungProba.applyValue();
-	d1MediumProba.applyValue();
-	d1OldProba.applyValue();
-	d1YoungDuration.applyValue();
-	d1MediumDuration.applyValue();
-	d1OldDuration.applyValue();
-	d2MediumProba.applyValue();
+	d1YoungProba.refresh();		d1MediumProba.refresh();		d1OldProba.refresh();
+	d1YoungDuration.refresh();	d1MediumDuration.refresh();	d1OldDuration.refresh();
+	d2MediumProba.refresh();
 
 	while (j == 0){
 		SDL_Event event;
@@ -293,89 +121,17 @@ void changeDiseasesParameters(){
 		case SDL_MOUSEBUTTONDOWN:
 			x = event.button.x;
 			y = event.button.y;
-			if (y < 900){
-
-				if (x > d1YoungProbax + l1 + l2 && x < d1YoungProbax + l1 + l2 + l3){
-					//Bloc disease1 proba.
-					if (y > d1YoungProbay && y < d1YoungProbay + h0){
-						if (d1YoungProba.checkIncrement() == 1){
-							d1YoungProba.increment();
-						}
-					}
-					else if (y > d1YoungProbay + h0 && y < d1YoungProbay + h){
-						if (d1YoungProba.checkDecrement() == 1){
-							d1YoungProba.decrement();
-						}
-					}
-					else if (y > d1MediumProbay && y < d1MediumProbay + h0){
-						if (d1MediumProba.checkIncrement() == 1){
-							d1MediumProba.increment();
-						}
-					}
-					else if (y > d1MediumProbay + h0 && y < d1MediumProbay + h){
-						if (d1MediumProba.checkDecrement() == 1){
-							d1MediumProba.decrement();
-						}
-					}
-					else if (y > d1OldProbay && y < d1OldProbay + h0){
-						if (d1OldProba.checkIncrement() == 1){
-							d1OldProba.increment();
-						}
-					}
-					else if (y > d1OldProbay + h0 && y < d1OldProbay + h){
-						if (d1OldProba.checkDecrement() == 1){
-							d1OldProba.decrement();
-						}
-					}
-
-
-					//Bloc disease1 duration.
-					if (y > d1YoungDurationy && y < d1YoungDurationy + h0){
-						if (d1YoungDuration.checkIncrement() == 1){
-							d1YoungDuration.increment();
-						}
-					}
-					else if (y > d1YoungDurationy + h0 && y < d1YoungDurationy + h){
-						if (d1YoungDuration.checkDecrement() == 1){
-							d1YoungDuration.decrement();
-						}
-					}
-					else if (y > d1MediumDurationy && y < d1MediumDurationy + h0){
-						if (d1MediumDuration.checkIncrement() == 1){
-							d1MediumDuration.increment();
-						}
-					}
-					else if (y > d1MediumDurationy + h0 && y < d1MediumDurationy + h){
-						if (d1MediumDuration.checkDecrement() == 1){
-							d1MediumDuration.decrement();
-						}
-					}
-					else if (y > d1OldDurationy && y < d1OldDurationy + h0){
-						if (d1OldDuration.checkIncrement() == 1){
-							d1OldDuration.increment();
-						}
-					}
-					else if (y > d1OldDurationy + h0 && y < d1OldDurationy + h){
-						if (d1OldDuration.checkDecrement() == 1){
-							d1OldDuration.decrement();
-						}
-					}
-
-
-					//Bloc disease2 proba
-					if (y > d2MediumProbay && y < d2MediumProbay + h0){
-						if (d2MediumProba.checkIncrement() == 1){
-							d2MediumProba.increment();
-						}
-					}
-					else if (y > d2MediumProbay + h0 && y < d2MediumProbay + h){
-						if (d2MediumProba.checkDecrement() == 1){
-							d2MediumProba.decrement();
-						}
-					}
-				}
+			if (y < 900)
+				{
+				d1YoungProba.increment(x, y);		d1YoungProba.decrement(x, y);
+				d1MediumProba.increment(x, y);		d1MediumProba.decrement(x, y);
+				d1OldProba.increment(x, y);			d1OldProba.decrement(x, y);	
+				d1YoungDuration.increment(x, y);	d1YoungDuration.decrement(x, y);
+				d1MediumDuration.increment(x, y);	d1MediumDuration.decrement(x, y);
+				d1OldDuration.increment(x, y);		d1OldDuration.decrement(x, y);
+				d2MediumProba.increment(x, y);		d2MediumProba.decrement(x, y);
 			}
-			if (x > 1000 && x < 1300 && y > 900 && y < 950) {
+			else if (x > 1000 && x < 1300 && y > 900 && y < 950) {
 					j = 1;
 			}
 			break;
@@ -386,50 +142,69 @@ void changeDiseasesParameters(){
 		}
 	}
 }
+		
 
-/**************************************************************************************************************************************/
-
-
+	
 /***************************************************************	MAIN	***********************************************************/
 int main(int argc, char* args[]) {
 
 	initSDL();
 
-	title = load_image("images\\title.bmp");
-	apply_surface(0, 0, title, screen);
+	//Les surfaces que nous allons utiliser 
+	SDL_Surface *home = NULL;					SDL_Surface *startButton = NULL;
+	SDL_Surface *endButton = NULL;				SDL_Surface *restartButton = NULL;
+	SDL_Surface *background = NULL;				SDL_Surface *cornerBackground = NULL;
+	SDL_Surface *leftBackground = NULL;			SDL_Surface *topBackground = NULL;
+	SDL_Surface *mapBackground = NULL;			SDL_Surface *pixelMap = NULL;
+	SDL_Surface *individual0 = NULL;			SDL_Surface *maison0 = NULL;
+	SDL_Surface *route0 = NULL;					SDL_Surface *parametersBackground = NULL;
+	SDL_Surface *diseasesBackground = NULL;		SDL_Surface *title = NULL;
+
+	images Ihome(150, 80, screen, "images\\home.bmp");
+	images IstartButton(350, 400, screen, "images\\startButton.bmp");
+	images IendButton(620, 386, screen, "images\\endButton.bmp");
+	images IrestartButton(510, 386, screen, "images\\restartButton.bmp");
+	images Ibackground(0, 0,  screen, "images\\background.bmp");
+	images IcornerBackground(0, 0,  screen, "images\\cornerBackground.bmp");
+	images IleftBackground(0, mapBackgroundY,  screen, "images\\leftBackground.bmp");
+	images ItopBackground(mapBackgroundX, 0, screen, "images\\topBackground.bmp");
+	images ImapBackground(mapBackgroundX, mapBackgroundY,  screen, "images\\map.bmp");
+	images IparametersBackground(0, 0,  screen, "images\\parametersImages\\parametersBackground.bmp");
+	images IdiseasesBackground(0, 0,  screen, "images\\parametersImages\\diseasesBackground.bmp");
+	images Ititle(0, 0,  screen, "images\\title.bmp");
+	images Iindividual0(0, 0,  screen, "images\\individual0.bmp");
+
+	Ititle.apply_surface();
 	SDL_Flip(screen);
 	SDL_Delay(1000);
 
-
-
 	do{
-			parametersBackground = load_image("images\\parametersImages\\parametersBackground.bmp");
-			apply_surface(0, 0, parametersBackground, screen);
+			IparametersBackground.apply_surface();
 			changePopulationParameter();
-			diseasesBackground = load_image("images\\parametersImages\\diseasesBackground.bmp");
-			apply_surface(0, 0, diseasesBackground, screen);
+			IdiseasesBackground.apply_surface();
 			changeDiseasesParameters();
-			homeStart();
-		
+			Ibackground.apply_surface();
+			Ihome.apply_surface();
+			IstartButton.apply_surface();
+			SDL_Flip(screen);		
 	} while (start());
 
 	do{
-		ongoingBackground();
-
-		long day_value = 0;
-		figures dayFigures(screen, &day_value, 50 + l1 + e, 250 + e, figuresColor, 0); //nombre=compteur, x=10, y=410, couleur=figuresColor
+		//On applique le fond sur l'écran 
+		IcornerBackground.apply_surface();		ItopBackground.apply_surface();
+		IleftBackground.apply_surface();		ImapBackground.apply_surface();
+		
+		figures dayFigures(screen, 0, 50 + l1 + e, 250 + e, figuresColor, 0); //nombre=compteur, x=10, y=410, couleur=figuresColor
 
 		int x0 = 150 * blockSize;
 		int y0 = 100 * blockSize;
 
-		while (day_value < 100000)
+		while (dayFigures.getNumber() < 100)
 		{
-			//Chargement des images 
-			individual0 = load_image("images\\individual0.bmp");
 
 			//On applique le fond sur l'écran 
-			apply_surface(mapX, mapY, map, screen);
-			apply_surface(x0, y0, individual0, screen);
+			ImapBackground.apply_surface();
+			Iindividual0.apply_surface();
 
 			/*******************************************************
 			//TEST POUR YUNXUAN
@@ -443,16 +218,16 @@ int main(int argc, char* args[]) {
 			case SDL_KEYDOWN:
 			switch (event.key.keysym.sym){
 			case SDLK_UP:
-			y0 -= blockSize;
+			if (map[x0][y0].Getnature() != 0) y0 -= blockSize;			
 			break;
 			case SDLK_RIGHT:
-			x0 += blockSize;
+			if (map[x0][y0].Getnature() != 0) x0 += blockSize;
 			break;
 			case SDLK_DOWN:
-			y0 += blockSize;
+			if (map[x0][y0].Getnature() != 0) y0 += blockSize;			
 			break;
 			case SDLK_LEFT:
-			x0 -= blockSize;
+			if (map[x0][y0].Getnature() != 0) x0 -= blockSize;		
 			break;
 			} break;
 
@@ -462,20 +237,12 @@ int main(int argc, char* args[]) {
 			}
 			****************************************************/
 
-			day_value++ ; //ca incremente aussi dayFigures, cette boucle tourne une fois par jour
-
-			while (SDL_GetTicks()<day + 50) SDL_Delay(1);
-
-			day = SDL_GetTicks();
-
-			dayFigures.refresh();
-
-			SDL_Flip(screen);
-
 			dayFigures.remove();
-
-			//SDL_Delay(20);
-
+			dayFigures.increment();
+			dayFigures.refresh();
+			SDL_Flip(screen);
+			SDL_Delay(20);
+			
 			if (SDL_PollEvent(&event)) {
 
 				switch (event.type){
@@ -501,36 +268,23 @@ int main(int argc, char* args[]) {
 			}
 		}
 
-		day = SDL_GetTicks();
-		day_value = 0;
-
-		/*
-		do
-		{
-		chartPage();
-		} while (chartPage());
-		*/
-		endBackground();
+		Ibackground.apply_surface();					//On applique le fond sur l'écran 
+		IendButton.apply_surface();
+		IrestartButton.apply_surface();
+		SDL_Flip(screen);								//On affiche l'écran.
 
 	} while (end()); //on recommence la boucle do si fin=true (bouton restart) et on sort de la boucle si fin=false (bouton end)
 
-	fprintf(stdout, "nombre réel de frames par secondes : %f\n", freq(dayZero, day, day_value));
-
 
 	//Libération des surfaces 
-	SDL_FreeSurface(home);
-	SDL_FreeSurface(startButton);
-	SDL_FreeSurface(endButton);
-	SDL_FreeSurface(restartButton);
-	SDL_FreeSurface(background);
-	SDL_FreeSurface(screen);
-	SDL_FreeSurface(cornerBackground);
-	SDL_FreeSurface(leftBackground);
-	SDL_FreeSurface(topBackground);
-	SDL_FreeSurface(map);
-	SDL_FreeSurface(maison0);
-	SDL_FreeSurface(route0);
+	SDL_FreeSurface(home);					SDL_FreeSurface(startButton);
+	SDL_FreeSurface(endButton);				SDL_FreeSurface(restartButton);
+	SDL_FreeSurface(background);			SDL_FreeSurface(screen);
+	SDL_FreeSurface(cornerBackground);		SDL_FreeSurface(leftBackground);
+	SDL_FreeSurface(topBackground);			SDL_FreeSurface(mapBackground);
+	SDL_FreeSurface(maison0);				SDL_FreeSurface(route0);
 	SDL_FreeSurface(individual0);
+	
 	//On quitte SDL 
 	SDL_Quit();
 
@@ -558,31 +312,11 @@ void initSDL()
 		exit(EXIT_FAILURE);
 	}
 
-	//Certains paramètres de l'image peuvent influencer le blit. Ainsi, une image peut être masquée, 
-	//c'est à dire qu'une de ses couleurs ne sera pas copiée lors du blit. Cette couleur est appelée 
-	//le masque et est choisie par la fonction SDL_SetColorKey. Une couleur de choix pour remplir 
-	//cette tâche ingrate est la couleur 0xff00ff, qui correspond à une espèce de mauve infâme qu'
-	//aucun graphiste sain n'oserait utiliser dans ses compositions. :)
-
-	// Set the title bar
-	SDL_WM_SetCaption("Epidemic Spread Model", NULL);
+	SDL_WM_SetCaption("Epidemic Spread Model", NULL); // Set the title bar
 }
 /***************************************************************************************************/
 
 
-/**********	homeStart()	****************************************************************************/
-void homeStart()
-{
-
-	home = load_image("images\\home.bmp");						//Chargement des images
-	background = load_image("images\\background.bmp");
-	apply_surface(0, 0, background, screen);					//On applique le fond sur l'écran
-	apply_surface(150, 80, home, screen);						//On applique le message sur l'écran 
-	startButton = load_image("images\\startButton.bmp");
-	apply_surface(350, 400, startButton, screen);				//On applique le message sur l'écran
-	SDL_Flip(screen);											//Mise à jour de l'écran 
-}
-/***************************************************************************************************/
 
 
 /**********	start()	********************************************************************************/
@@ -607,41 +341,6 @@ bool start()
 		break;
 	}
 	return start();
-}
-/***************************************************************************************************/
-
-
-
-
-
-/**********	ongoingBackground()	********************************************************************/
-void ongoingBackground()
-{
-	//Chargement des images 
-	cornerBackground = load_image("images\\cornerBackground.bmp");
-	topBackground = load_image("images\\topBackground.bmp");
-	leftBackground = load_image("images\\leftBackground.bmp");
-	map = load_image("images\\map.bmp");
-	//On applique le fond sur l'écran 
-	apply_surface(0, 0, cornerBackground, screen);
-	apply_surface(mapX, 0, topBackground, screen);
-	apply_surface(0, mapY, leftBackground, screen);
-	apply_surface(mapX, mapY, map, screen);
-}
-/***************************************************************************************************/
-
-
-/**********	endBackground()	************************************************************************/
-void endBackground()
-{
-
-	background = load_image("images\\background.bmp");			//Chargement des images
-	endButton = load_image("images\\endButton.bmp");
-	restartButton = load_image("images\\restartButton.bmp");
-	apply_surface(0, 0, background, screen);					//On applique le fond sur l'écran 
-	apply_surface(620, 386, endButton, screen);
-	apply_surface(510, 386, restartButton, screen);
-	SDL_Flip(screen);											//On affiche l'écran.
 }
 /***************************************************************************************************/
 
@@ -677,46 +376,3 @@ bool end()
 }
 /***************************************************************************************************/
 
-
-/**********	freq()	********************************************************************************/
-float freq(int dayStart, int dayEnd, int nbrUpdate)
-{
-	return (float)(1000 * nbrUpdate) / (float)(dayEnd - dayStart);
-}
-/***************************************************************************************************/
-
-
-
-
-
-/*
-bool chartPage()
-{
-apply_surface(0, 0, background, screen);
-chart chartMalade(topBackground, individual1, 100, 100);
-chartMalade.applyAxis();
-
-
-apply_surface(500, 100, startButton, screen);
-SDL_Flip(screen);
-SDL_Event event;
-int x, y;
-do
-SDL_WaitEvent(&event);
-while (event.type == SDL_MOUSEMOTION);
-
-switch (event.type)
-{
-case SDL_MOUSEBUTTONDOWN:
-x = event.button.x;
-y = event.button.y;
-if (x>500 && x<600 && y>100 && y<141) return false;
-break;
-
-case SDL_QUIT:
-exit(EXIT_SUCCESS);
-break;
-}
-return chartPage();
-}
-*/

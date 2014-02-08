@@ -1,20 +1,14 @@
 #include "parameters.h"
 
-
-parameters::parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color, bool rate)
+parameters::parameters(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate, int h, int l, int max, int min, int delta):figures(screen, number, x, y, color, rate)
 {
 	//Voir parameters.h pour les commentaires sur les champs.
-	_screen = screen;
-	_value = value;
-	_x = x;
-	_y = y;
+	_h = h;
+	_l = l;
 	_max = max;
 	_min = min;
 	_delta = delta;
-	_color = color;
-	_rate = rate;
 }
-
 
 
 
@@ -23,47 +17,61 @@ parameters::~parameters()
 }
 
 
-//applyValue() affiche la valeur du paramètre.
-void parameters::applyValue()
+//increment() incrémente la valeurs du paramètre de _delta.
+void parameters::increment(int x, int y)
 {
-	figures valueFigures(_screen, &_value, _x + l1 + e, _y + e, _color, _rate);	//Comme on a des chiffres à afficher: on utilise la classe "figures". 
-	valueFigures.refresh();														//.refresh affiche la valeur du paramètre: _value
-	SDL_Flip(_screen);															//On met à jour l'écran.
+	if (checkIncrement() == 1){
+		if (x > _x + _l - l1 - e  && x < _x + _l - l1 + 2*_h - e && y > _y -e  && y < _y + _h - e){	
+			remove();			//On commence par effacer de l'écran la valeur du paramètre.
+			_number += _delta;	//On incrémente _value de _delta.
+			refresh();
+		}
+	}
 }
-
-
-//removeValue() efface de l'écran la valeur du paramètre, en réécrivant cette valeur en noir (couleur du fond).
-void parameters::removeValue()
-{
-	Uint32 C = _color;	//On garde de coter la couleur initiale.
-	_color = 0;			//On sélectionne la couleur noire.
-	applyValue();		//On efface de l'écran la valeur du paramètre (ie on la réécrit en noir).
-	_color = C;			//On resélectionne la couleur initiale.
-}
-
 
 //increment() incrémente la valeurs du paramètre de _delta.
-void parameters::increment()
+void parameters::increment(int x, int y, parameters *param)
 {
-		removeValue();		//On commence par effacer de l'écran la valeur du paramètre.
-		_value += _delta;	//On incrémente _value _delta.
-		applyValue();		//On affiche cette nouvelle valeur.
+	if (checkIncrement() == 1 && param -> checkDecrement() == 1){
+		increment(x, y);
+		if (x > _x + _l - l1 - e && x < _x + _l - l1 + 2*_h - e && y > _y - e && y < _y + _h - e){	
+			param->remove();
+			param->_number -= param->_delta;
+			param-> refresh(); 
+		}
+	}
 }
 
+//decrement() décrémente la valeurs du paramètre de _delta.
+void parameters::decrement(int x, int y)
+{
+	if (checkDecrement() == 1){
+		if (x > _x + _l - l1 - e && x < _x + _l - l1 + 2*_h - e && y > _y + _h - e && y < _y + 2*_h - e){		
+			remove();			//On commence par effacer de l'écran la valeur du paramètre.
+			_number -= _delta;	//On décrémente _value _delta.
+			refresh();
+		}
+	}
+}
 
 //decrement() décrémente la valeurs du paramètre de _delta.
-void parameters::decrement()
+void parameters::decrement(int x, int y, parameters *param)
 {
-		removeValue();		//On commence par effacer de l'écran la valeur du paramètre.
-		_value -= _delta;	//On décrémente _value _delta.
-		applyValue();		//On affiche cette nouvelle valeur.
+	if (checkDecrement() == 1 && param -> checkIncrement() == 1){
+		decrement(x, y);
+		if (x > _x + _l - l1 - e && x < _x  + _l - l1 + 2*_h - e && y > _y + _h - e && y < _y + 2*_h - e){		
+			param->remove();
+			param->_number += param->_delta;
+			param->refresh();
+		}
+	}
 }
 
 
 //checkIncrement() vérifie si on peut incrémenter _value (ie _value < _max).
 bool parameters::checkIncrement()
 {
-	if (_value < _max){
+	if (_number < _max){
 		return true;
 	}
 	else return false;
@@ -73,7 +81,7 @@ bool parameters::checkIncrement()
 ////checkDecrement() vérifie si on peut décrémenter _value (ie _value > _max).
 bool parameters::checkDecrement()
 {
-	if (_value > _min){
+	if (_number > _min){
 		return true;
 	}
 	else return false;

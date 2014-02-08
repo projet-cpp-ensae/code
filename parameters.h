@@ -1,3 +1,4 @@
+
 /*
 Avant de commencer une partie, on demande d'entrer des paramètres d'étude: taille de la population, taux de malades ...
 Une interface graphique présente ces paramètres dans des rectangles comme illustré ci-dessous.
@@ -8,6 +9,7 @@ Il y a deux boutons à droite de chaque rectangle: bouton + et bouton - pour choi
 
 #ifndef PARAMETERS_H
 #include "figures.h"
+#include <string>
 #define PARAMETERS_H
 #endif
 
@@ -50,28 +52,24 @@ const int e = 9;
 */
 
 
-class parameters
+class parameters : public figures
 {
 private:
-	SDL_Surface* _screen;	//La surface sur laquelle est affiché le paramètre.
-	long int _value;		//La valeur du paramètre.
-	int _x;					//L'abscisse du coin en haut à gauche du rectangle du paramètre.
-	int _y;					//L'ordonné du coin en haut à gauche du rectangle du paramètre.
+	int _h;					
+	int _l;
 	int _max;				//La valeur maximale que peut prendre ce paramètre.
 	int _min;				//La valeur minimale que peut prendre ce paramètre.
 	int _delta;				//Le pas d'incrémentation quand on clique sur les boutons + et -.
-	Uint32 _color;			//La couleur des chiffres.
-	bool _rate;				//Un booléen qui indique si c'est un entier ou un taux (de probabilité).
-
+	bool checkIncrement();	//Vérifie que la valeur est inférieure strictement à _max;
+	bool checkDecrement();	//Vérifie que la valeur est supérieure strictement à _min.
+	
 public:
-	parameters(SDL_Surface* screen, long int value, int x, int y, int max, int min, int delta, Uint32 color, bool rate);
+	parameters(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate, int h, int l, int max, int min, int delta);
 	~parameters();
-	//Voir parameters.cpp pour les commentaires.
-	void applyValue();
-	void removeValue();
-	void increment();
-	void decrement();
-	bool checkIncrement();
-	bool checkDecrement();
+	void increment(int x, int y);						//Incrémente _number de _delta.
+	void increment(int x, int y, parameters *param);	//Incrémente _number de _delta et décrémente son paramètre complémentaire de _delta.
+	void decrement(int x, int y);						//Décrémente _number de _delta.
+	void decrement(int x, int y, parameters *param);	//Décrémente _number de _delta et incrémente son paramètre complémentaire de _delta.
+	
 };
 

@@ -21,31 +21,32 @@ const int L = 2;
 
 class figures
 {
-private:
-	long int* _number;										//Le nombre à afficher. 
+protected:
+	long int _number;										//Le nombre à afficher. 
 	int digit[6];											//Le chiffre de la puissance 10^i.
-	SDL_Surface* _screen;									//Laa surface où doit être affiché le nombre.
-	int _x, _y;												//Ce sont les coordonnées du point le plus haut à gauche du nombre à afficher.			
-	SDL_Rect R[7];											//Il nous faut sept surfaces rectangulaires pour les 7 barres d'un chiffres.
+	SDL_Surface* _screen;									//La surface où doit être affiché le nombre.
+	int _x, _y;												//Ce sont les coordonnées du point du coin en haut à gauche du nombre à afficher.			
+	SDL_Rect R[7];											//Il nous faut sept surfaces rectangulaires pour les 7 barres qui forment un chiffres.
 	SDL_Rect point;											//Surface pour afficher une virgule (pour les nombres décimaux).
 	Uint32 _color;											//La couleur utilisée pour les chiffres.
 	bool _rate;												//Indique si le nombre est un entier ou un taux (de probabilité).
 															//Un taux est un décimal entre 0 et 1 et doit donc être précédé d'une virgule.
 
 	//Voir figures.cpp pour les commentaires.
-	void recalculate();										
+	void recalculate();														
 	long int power10(int exponent);							
 	void defRect(SDL_Rect& R, int x, int y, int w, int h);	
+	void refreshInt();
 
 public:
-	figures(SDL_Surface* screen, long int* number, int x, int y, Uint32 color, bool rate);
+	figures(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate);
 	~figures();
-	//Voir figures.cpp pour les commentaires.
-	void refreshInt();										
+	//Voir figures.cpp pour les commentaires.										
 	void refresh();											
 	void remove();											
-	void operator --(int);									
-	void operator ++(int);									
+	void decrement();									
+	void increment();	
+	long int getNumber();
 };
 
 
