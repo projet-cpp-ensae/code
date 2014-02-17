@@ -45,14 +45,14 @@ bool bar[10][7] = {
 
 
 
-figures::figures(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate)
+figures::figures(long int number, int x, int y, Uint32 color, bool rate)
 {
 	if (number>999999) {
 		fprintf(stderr, "nombre trop grand !!\n");
 	}
 
 	//Voir parameters.h pour les commentaires sur les champs.
-	_screen = screen;
+	_screen = new Screen();
 	_number = number;
 	_x = x;
 	_y = y;
@@ -91,7 +91,7 @@ void figures::refreshInt()
 		//On s'occupe de la barre j du chiffre digit[i], cette barre étant représentée par la surface R[j].
 		//On rappelle que les éléments bar[k][l] sont des bool.
 		//Si bar[k][j]= TRUE (ie =1) alors on remplit le surface rectangulaire R[j] par la couleur: _color.
-		for (int j = 0; j <= 6; j++) if (bar[digit[i]][j]) SDL_FillRect(_screen, &R[j], _color);
+		for (int j = 0; j <= 6; j++) if (bar[digit[i]][j]) SDL_FillRect(_screen->GetScreen(), &R[j], _color);
 
 		//On affiche les chiffres (ie les surfaces R[j]), du chiffre des unités vers le chiffre de plus grande puissance de 10.
 		//On note que la largeur d'un chiffre fait H+2L.
@@ -120,13 +120,13 @@ void figures::refresh()
 		if (_number < 10){
 
 			//On remplit la surface de la virgule avec la couleur _color.
-			SDL_FillRect(_screen, &point, _color);		
+			SDL_FillRect(_screen->GetScreen(), &point, _color);		
 
 			//On décale toutes les barres des chiffres de 3L vers la droite car la virgule est un carré de coté L, et on veut un espace de 2L après la virgule: L + 2L = 3L.
 			for (int j = 0; j <= 6; j++) R[j].x += 3 * L;
 
 			//Comme on a un taux < 10%, le premier chiffre après la virgule est un 0: on affiche un 0. On a alors ".0".
-			for (int j = 0; j <= 6; j++) if (bar[0][j]) { SDL_FillRect(_screen, &R[j], _color);}
+			for (int j = 0; j <= 6; j++) if (bar[0][j]) { SDL_FillRect(_screen->GetScreen(), &R[j], _color);}
 
 			//On décale toutes les barres de H + 4L car on vient d'ajouter un 0 de largeur H+2L et on veut un espace de 2L avec le prochain chiffre: H+2L + 2L = H+4L.
 			for (int j = 0; j <= 6; j++) R[j].x += H + 4 * L;
@@ -142,7 +142,7 @@ void figures::refresh()
 		else{
 
 			//On remplit la surface de la virgule avec la couleur _color.
-			SDL_FillRect(_screen, &point, _color);
+			SDL_FillRect(_screen->GetScreen(), &point, _color);
 
 			//On décale toutes les barres des chiffres de 3L vers la droite car la virgule est un carré de coté L, et on veut un espace de 2L après la virgule: L + 2L = 3L.
 			for (int j = 0; j <= 6; j++) R[j].x += 3 * L;
@@ -156,7 +156,7 @@ void figures::refresh()
 	else{
 		refreshInt();
 	}
-	SDL_Flip(_screen);
+	SDL_Flip(_screen->GetScreen());
 }
 
 
@@ -228,7 +228,12 @@ long int figures::getNumber()
 	return _number;
 }
 
+void figures::setNumber(int x){
+	_number = x;
+}
 
 figures::~figures()
 {
 }
+
+

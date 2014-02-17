@@ -1,6 +1,6 @@
 #include "parameters.h"
 
-parameters::parameters(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate, int h, int l, int max, int min, int delta):figures(screen, number, x, y, color, rate)
+parameters::parameters(long int number, int x, int y, Uint32 color, bool rate, int h, int l, int max, int min, int delta):figures(number, x, y, color, rate)
 {
 	//Voir parameters.h pour les commentaires sur les champs.
 	_h = h;

@@ -14,6 +14,8 @@ On explique au début du figures.cpp comment est représenté un chiffre.
 #define FIGURES_H
 #endif
 
+#include "Screen.h"
+
 //Comme expliqué dans le figures.cpp, un chiffre est construit par un assemblage de barres.
 //Une barre étant une surface rectangulaire de dimensions H x L.
 const int H = 14;
@@ -24,7 +26,8 @@ class figures
 protected:
 	long int _number;										//Le nombre à afficher. 
 	int digit[6];											//Le chiffre de la puissance 10^i.
-	SDL_Surface* _screen;									//La surface où doit être affiché le nombre.
+	Screen* _screen;
+	//SDL_Surface* _screen;									//La surface où doit être affiché le nombre.
 	int _x, _y;												//Ce sont les coordonnées du point du coin en haut à gauche du nombre à afficher.			
 	SDL_Rect R[7];											//Il nous faut sept surfaces rectangulaires pour les 7 barres qui forment un chiffres.
 	SDL_Rect point;											//Surface pour afficher une virgule (pour les nombres décimaux).
@@ -39,7 +42,7 @@ protected:
 	void refreshInt();
 
 public:
-	figures(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate);
+	figures(long int number, int x, int y, Uint32 color, bool rate);
 	~figures();
 	//Voir figures.cpp pour les commentaires.										
 	void refresh();											
@@ -47,6 +50,7 @@ public:
 	void decrement();									
 	void increment();	
 	long int getNumber();
+	void setNumber(int x);
 };
 
 

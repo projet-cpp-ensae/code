@@ -64,12 +64,11 @@ private:
 	bool checkDecrement();	//Vérifie que la valeur est supérieure strictement à _min.
 	
 public:
-	parameters(SDL_Surface* screen, long int number, int x, int y, Uint32 color, bool rate, int h, int l, int max, int min, int delta);
+	parameters(long int number, int x, int y, Uint32 color, bool rate, int h, int l, int max, int min, int delta);
 	~parameters();
 	void increment(int x, int y);						//Incrémente _number de _delta.
 	void increment(int x, int y, parameters *param);	//Incrémente _number de _delta et décrémente son paramètre complémentaire de _delta.
 	void decrement(int x, int y);						//Décrémente _number de _delta.
 	void decrement(int x, int y, parameters *param);	//Décrémente _number de _delta et incrémente son paramètre complémentaire de _delta.
-	
 };
 
