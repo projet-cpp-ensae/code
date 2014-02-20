@@ -2,32 +2,23 @@
 #include <vector>
 #include "square.h"
 
-const double mediumstay = 0.2;
+const double mediumstay = 0.2; //proba de rester sur place
 
 medium::medium(void)
 {
-	
 }
-
 
 medium::~medium(void)
 {
 }
 
-void medium::Move(std::vector <std::vector <class square>> &map, std::vector <int> nbhouse, std::vector<int> nbhouse2)
+void medium::Move(std::vector <std::vector <class square>> &map, std::vector <int> &nbhouse, std::vector<int> &nbhouse2)
 {
-	std::vector <std::vector <int>> available = (*this).Checkcase(map);
+	std::vector <std::vector <int>> available = (*this).Checkcase(map); //obtention les cases disponibles
 	int nsquare = available[0].size();
-	if (_stepleft > 0) 
-		{
-			if (nsquare>0) Movestep(map, available[0][_direction % nsquare], available[1][_direction % nsquare], nbhouse, nbhouse2);
-			_stepleft--;
-	}
-	else
-	{
 	double step = (1.0-mediumstay)/nsquare;
 	double temp = (rand() % 100)/100.0;
-	if (temp > mediumstay)
+	if (temp > mediumstay) //si le nombre aleatoire est superieur a la proba de rester sur place : on le fait bouger
 	{
 		int i = 0;
 		for (i=1; i<nsquare+1; i++)
@@ -35,26 +26,56 @@ void medium::Move(std::vector <std::vector <class square>> &map, std::vector <in
 			if (temp <= mediumstay + i*step) 
 				{
 					(*this).Movestep(map, available[0][i-1], available[1][i-1], nbhouse, nbhouse2);
-					_direction = i;
 					break;
 				};
 		}
 	}
-	_stepleft = 25;
-	}
 }
 
-void medium::Movestep(std::vector <std::vector <class square>> &map, int x, int y, std::vector <int> nbhouse, std::vector<int> nbhouse2)
+/*void medium::Move(std::vector <std::vector <class square>> &map, std::vector <int> nbhouse, std::vector<int> nbhouse2)
+{
+        std::vector <std::vector <int>> available = (*this).Checkcase(map);
+        int nsquare = available[0].size();
+        if (nsquare > 0)
+        {
+                if ((_stepleft > 0) && (nsquare == 4))
+                        {
+                                Movestep(map, available[0][_direction-1], available[1][_direction-1], nbhouse, nbhouse2);
+                                _stepleft--;
+                }
+                else
+                {
+                        double step = (1.0-mediumstay)/nsquare;
+                        double temp = (rand() % 100)/100.0;
+                        if (temp > mediumstay)
+                        {
+                                int i = 0;
+                                for (i=1; i<nsquare+1; i++)
+                                {
+                                        if (temp <= mediumstay + i*step) 
+                                                {
+                                                        (*this).Movestep(map, available[0][i-1], available[1][i-1], nbhouse, nbhouse2);
+                                                        _stepleft = 1;
+                                                        _direction = i;
+                                                        break;
+                                                };
+                                }
+                        }
+                }
+        }
+}*/
+
+void medium::Movestep(std::vector <std::vector <class square>> &map, int x, int y, std::vector <int> &nbhouse, std::vector<int> &nbhouse2)
 {
 	map[(*this).Getx()][(*this).Gety()].Setoccupied(false);
 	if ((*this).Getillness1())
-	if ((map[(*this).Getx()][(*this).Gety()].Getnature() == 2)&&((*this).Getillness1())) nbhouse[map[(*this).Getx()][(*this).Gety()].Getnumber()] --;
-	if ((map[(*this).Getx()][(*this).Gety()].Getnature() == 2)&&((*this).Getillness2())) nbhouse2[map[(*this).Getx()][(*this).Gety()].Getnumber()] --;
+	if ((map[(*this).Getx()][(*this).Gety()].Getnature() == 2)&&((*this).Getillness1())) nbhouse[map[(*this).Getx()][(*this).Gety()].Getnumber()]--;
+	if ((map[(*this).Getx()][(*this).Gety()].Getnature() == 2)&&((*this).Getillness2())) nbhouse2[map[(*this).Getx()][(*this).Gety()].Getnumber()]--;
 	(*this).Setx(x);
 	(*this).Sety(y);
 	map[x][y].Setoccupied(true);
-	if ((map[x][y].Getnature() == 2)&((*this).Getillness1())) nbhouse[map[x][y].Getnumber()] ++;
-	if ((map[x][y].Getnature() == 2)&((*this).Getillness2())) nbhouse2[map[x][y].Getnumber()] ++;
+	if ((map[x][y].Getnature() == 2)&((*this).Getillness1())) nbhouse[map[x][y].Getnumber()]++;
+	if ((map[x][y].Getnature() == 2)&((*this).Getillness2())) nbhouse2[map[x][y].Getnumber()]++;
 
 }
 

@@ -1,10 +1,5 @@
+#pragma once
 #include "parameters.h"
-#include <stdlib.h> //pour exit et atexit
-#include <stdio.h>
-#include <sdl.h>
-#include "constants.h"
-#include"screen.h"
-
 
 class listParameters
 {
@@ -24,10 +19,6 @@ public:
 	parameters* medium;
 	parameters* old;
 	
-	//Screen* screen;
-	//SDL_Surface *screen;
-	Uint32 figuresColor;
-
 	parameters* d1YoungProba;
 	parameters* d1MediumProba;
 	parameters* d1OldProba;
@@ -36,25 +27,25 @@ public:
 	parameters* d1OldDuration;
 	parameters* d2MediumProba;
 
-	void changePopulationParameter();
-	void changeDiseasesParameters();
+	parameters* getPopulation();
+	parameters* getDuration();
+	parameters* getInfectives1();
+	parameters* getInfectives2();
+	parameters* getSusceptibles1();
+	parameters* getSusceptibles2();
+	parameters* getMale();
+	parameters* getFemale();
+	parameters* getYoung();
+	parameters* getMedium();
+	parameters* getOld();
+	parameters* getd1YoungProba();
+	parameters* getd1MediumProba();
+	parameters* getd1OldProba();
+	parameters* getd1YoungDuration();
+	parameters* getd1MediumDuration();
+	parameters* getd1OldDuration();
+	parameters* getd2MediumProba();
 
-	long int getPopulation();
-	long int getDuration();
-	long int getInfectives1();
-	long int getInfectives2();
-	long int getSusceptibles1();
-	long int getSusceptibles2();
-	long int getMale();
-	long int getFemale();
-	long int getYoung();
-	long int getMedium();
-	long int getOld();
-	long int getd1YoungProba();
-	long int getd1MediumProba();
-	long int getd1OldProba();
-	long int getd1YoungDuration();
-	long int getd1MediumDuration();
-	long int getd1OldDuration();
-	long int getd2MediumProba();
+	void changePopulationParameter();	//L'utilisateur change les paramètres tant qu'il n'a pas cliqu?sur le bouton "Continue".
+	void changeDiseasesParameters();	//L'utilisateur change les paramètres tant qu'il n'a pas cliqu?sur le bouton "Continue".
 };

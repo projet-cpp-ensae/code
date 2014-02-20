@@ -1,355 +1,118 @@
-
-#include <fstream>
-#include <string>
 #include <vector>
-#include <iostream>
 #include <random>
-
 #include "listParameters.h"
 #include "listImages.h"
 #include "square.h"
-#include "images.h"
 #include "individual.h"
 #include "young.h"
 #include "medium.h"
 #include "old.h"
-
+#include "initialisation.h"
 using namespace std;
-
-Screen screen;
-//SDL_Surface* screen = _screen.GetScreen();
-
-//SDL_Surface *screen = NULL;
-Uint32 figuresColor = 0xffff00;		//La couleur utilisée pour les chiffres.
-
-/*
-SDL_Surface* load_image(std::string _filename)
-{
-	SDL_Surface* loadedImage = NULL;						//Surface tampon qui nous servira pour charger l'image.
-	SDL_Surface* optimizedImage = NULL;						//L'image optimisée qu'on va utiliser. 
-	loadedImage = SDL_LoadBMP(_filename.c_str());			//Chargement de l'image.
-	if (loadedImage != NULL) {								//Si le chargement se passe bien: 
-		optimizedImage = SDL_DisplayFormat(loadedImage);	//Création de l'image optimisée.
-		SDL_FreeSurface(loadedImage);						//Libération de l'ancienne image.
-	}
-	return optimizedImage;									
-}
-*/
-
-int xPixels(int x){
-	return 500 + 4 * (x-1) ;
-}
-
-int yPixels(int y){
-	return 300 + 4 * (y-1);
-}
-
-
-vector<int> nbhouse(12,0);
-
-void Makemapbloc(vector <vector <square>> &map, int ii, int jj)
-{
-	int i = 0;
-	int j = 0;
-	for (i = ii*50; i<ii*50+50; i++)
-	{
-		for (j = 0; j<5; j++)
-		{
-			map[i+1][j + 1 + jj*50].assign(1, ii+jj*4, 0);
-			map[i+1][j + 46 + jj*50].assign(1, ii+jj*4, 0);
-		}
-	}
-
-	for (j = jj*50; j<jj*50+50; j++)
-	{
-		for (i = 0; i<5 ; i++)
-		{
-			map[i+1+ii*50][j].assign(1,ii+jj*4,0);
-			map[i+46+ii*50][j].assign(1,ii+jj*4,0);
-		}
-	}
-
-	for (i = 0; i<30; i++)
-	{
-		for (j = 0; j<30; j++)
-		{
-			map[i + 11 + ii*50][j + 11 + jj*50].assign(2, ii+jj*4, 0);
-		}
-	}
-	for (i = 0; i<5; i++)
-	{
-		for (j = 0; j<4; j++)
-		{
-			map[i + 6 + ii*50][j + 24 + jj*50].assign(1, ii+jj*4, 0);
-			map[i + 41 + ii*50][j + 24 + jj*50].assign(1, ii+jj*4, 0);
-		}
-	}
-	for (i = 0; i<4; i++)
-	{
-		for (j = 0; j<5; j++)
-		{
-			map[i + 24 + ii*50][j + 6 + jj*50].assign(1, ii+jj*4, 0);
-			map[i + 24 + ii*50][j + 41 + jj*50].assign(1, ii+jj*4, 0);
-		}
-	}
-	}
-
-vector <vector <square>> Makemap(void)
-{
-	vector <vector <square>> map(202, vector<square>(152));
-	int i = 0;
-	int j = 0;
-	for (i = 0; i<4; i++)
-	{
-		for (j=0; j<3; j++)
-		{
-			Makemapbloc(map, i, j);
-		}
-	}
-	return map;
-}
-
-vector <vector <int>> Allavailablesquare(vector <vector <square>> &map)
-{
-       vector <vector <int>> ans(2, vector <int>(0));
-       int i = 0;
-       int j = 0;
-       for (i=1; i<201; i++)
-       {
-             for (j=1; j<151; j++) 
-             {
-                    if (map[i][j].Getnature() != 0)
-                    {
-                           ans[0].push_back(i);
-                           ans[1].push_back(j);
-                    }
-             }
-       }
-       return ans;
-}
-
-vector <individual*> Makepopulation(int pop, int pctyoung, int pctmedium, int pctillness1, int pctillness2, vector <vector <square>> &map, vector<int> &nbhouse, vector<int> &nbhouse2, vector<int> &nbinf1, int &nbinf2)
-{
-	random_device rd;
-	mt19937 eng(rd());
-	uniform_int_distribution<> distr(1, 31415926535);
-	vector <individual*> population;
-	int i = 0;
-	vector<vector<int>> available = Allavailablesquare(map);
-	for (i=0;i<pop;i++)
-	{
-		int randage = distr(eng) % 100;
-		if (randage <= pctyoung) {population.push_back(new young()); population[i]->assign(distr(eng)%2, 0, 0, 0);}
-		else if (randage <= pctyoung + pctmedium) 
-		{
-			population.push_back(new medium());
-			population[i]->assign(distr(eng)%2, 1, 0, 0);
-			if (distr(eng)%100 < pctillness2) {population[i]->Setillness2(true); nbinf2++;}
-		}
-		else {population.push_back(new old()); population[i]->assign(distr(eng)%2, 2, 0, 0);}
-		int randillness1 = distr(eng) % 100;
-		int randillness2 = distr(eng) % 100;
-		if (randillness1 < pctillness1) {population[i]->Setillness1(true); nbinf1[population[i]->Getage()]++;}
-		if ((population[i]->Getage() == 1) && (randillness2 < pctillness2)) {population[i]->Setillness2(true); nbinf2++;}
-		int randposition = distr(eng) % available[0].size();
-		//while (map[available[0][randposition]][available[1][randposition]].Getoccupied()) int randposition = distr(eng) % (available[0].size());
-		population[i]->Setx(available[0][randposition]);
-		population[i]->Sety(available[1][randposition]);
-		map[available[0][randposition]][available[1][randposition]].Setoccupied(true);
-		if (map[available[0][randposition]][available[1][randposition]].Getnature() == 2)
-		{
-			if (population[i]->Getillness1()) nbhouse[map[available[0][randposition]][available[1][randposition]].Getnumber()]++;
-			if (population[i]->Getillness2()) nbhouse2[map[available[0][randposition]][available[1][randposition]].Getnumber()]++;
-		}
-		available[0].erase(available[0].begin() + randposition);
-		available[1].erase(available[1].begin() + randposition);
-
-	}
-	return population;
-}
-
 
 /***************************************************************	MAIN	***********************************************************/
 int main(int argc, char* args[]) {
-
-	screen.InitialScreen();
-
-
-
-	listImages listImages;
-	listParameters listParameters;
-	figures dayFigures(0, 50 + l1 + e, 250 + e, figuresColor, 0); //nombre=compteur, x=10, y=410, couleur=figuresColor
-
-	listImages.getItitle().apply_surface(screen.GetScreen());
-	SDL_Flip(screen.GetScreen());
-	SDL_Delay(1000);
-
-	do{
-		listImages.getIparametersBackground().apply_surface(screen.GetScreen());
-		listParameters.changePopulationParameter();
-		listImages.getIdiseasesBackground().apply_surface(screen.GetScreen());
-		listParameters.changeDiseasesParameters();
-		listImages.getIbackground().apply_surface(screen.GetScreen());
-		listImages.getIhome().apply_surface(screen.GetScreen());
-		listImages.getIstartButton().apply_surface(screen.GetScreen());
-		SDL_Flip(screen.GetScreen());		
-	} while (start());
+	
+	Screen screen;	//On crée une fenêtre.
+	screen.initialScreen();
+	Uint32 figuresColor = 0xffff00;	//La couleur utilisée pour les chiffres.
+	listImages listImages;			//On crée la liste des images	qu'on aura besoin.					
+	listParameters listParameters;	//On crée la liste des paramètres qu'on aura besoin.
+	figures dayFigures(0, 50 + l1 + e, 250 + e, figuresColor, 0);				//Le nombre de jours écoulés.
+	figures infectives1OnGoing(0, 75 + l1 + e, 375 + e, figuresColor, 1);		//Le taux de malades de type 1 (évoluera avec le temps).
+	figures infectives1YoungOnGoing(0, 75 + l1 + e, 450 + e, figuresColor, 1);	//Le taux de malades de type 1 parmi les jeunes (évoluera avec le temps).
+	figures infectives1MediumOnGoing(0, 75 + l1 + e, 525 + e, figuresColor, 1);	//Le taux de malade de type 1 parmi les âge-médian (évoluera avec le temps).
+	figures infectives1OldOnGoing(0, 75 + l1 + e, 600 + e, figuresColor, 1);	//Le taux de malades de type 1 parmi les vieux (évoluera avec le temps).
+	figures infectives2OnGoing(0, 75 + l1 + e, 725 + e, figuresColor, 1);		//Le taux de malades de type 2 (évoluera avec le temps).
+	vector <vector <square>> map = Makemap();	//On crée la map.
+	vector <int> nbhouse(12, 0);				//Nombre de malades1 dans chaque maison. 
+	vector <int> nbhouse2(12, 0);				//Nombre de malades2 dans chaque maison.
+	vector <int> nbinf1(3,0);					//Nombre de malade1 par catégorie d'âges.
+	int nbinf2 = 0;								//Nombre de malade2.
+	
+	listImages.getItitle()->apply_surface(screen.getScreen());	//On colle la page d'accueil.
+	SDL_Flip(screen.getScreen());	//On met ?jour l'écran.
+	SDL_Delay(1000);	//La page d'accueil restera affichée pendant 1sec.
 
 	do{
-		//On applique le fond sur l'écran 
-		listImages.getIcornerBackground().apply_surface(screen.GetScreen());		
-		listImages.getItopBackground().apply_surface(screen.GetScreen());
-		listImages.getIleftBackground().apply_surface(screen.GetScreen());		
-		listImages.getImapBackground().apply_surface(screen.GetScreen());
-		SDL_Flip(screen.GetScreen());
-		
-		//On applique le fond sur l'écran 
-		listImages.getIcornerBackground().apply_surface(screen.GetScreen());		
-		listImages.getItopBackground().apply_surface(screen.GetScreen());
-		listImages.getIleftBackground().apply_surface(screen.GetScreen());		
-		listImages.getImapBackground().apply_surface(screen.GetScreen());
+	listImages.getIparametersBackground()->apply_surface(screen.getScreen());	//On colle la première page de paramètres.
+	listParameters.changePopulationParameter();	//Voir dans la classe listParameters.
+	listImages.getIdiseasesBackground()->apply_surface(screen.getScreen());		//On colle la deuxième page de paramètres.
+	listParameters.changeDiseasesParameters();	//Voir dans la classe listParameters.			
+	listImages.getIcornerBackground()->apply_surface(screen.getScreen());		//On colle une image dans le coin en haut ?gauche.
+	listImages.getItopBackgroundStart()->apply_surface(screen.getScreen());		//On colle une image en haut.
+	listImages.getIleftBackground()->apply_surface(screen.getScreen());			//On colle une image ?droite
+	listImages.getImapBackground()->apply_surface(screen.getScreen());			//On colle l'image de la map.
+	SDL_Flip(screen.getScreen());	//On met ?jour l'écran.		
+	} while (start());	//start() est définie initialisation.cpp
 
-		vector <vector <square>> map = Makemap();
-		vector <int> nbhouse(12, 0);
-		vector <int> nbhouse2(12, 0);
-		vector <int> nbinf1(3,0);
-		int nbinf2 = 0;
-		vector <double> d1proba;
-		double probainf2 = listParameters.getd2MediumProba()/100.0;
-		d1proba.push_back(listParameters.getd1YoungProba()/100.0);
-		d1proba.push_back(listParameters.getd1MediumProba()/100.0);
-		d1proba.push_back(listParameters.getd1OldProba()/100.0);
-		vector <int> duration;
-		duration.push_back(listParameters.getd1YoungDuration());
-		duration.push_back(listParameters.getd1YoungDuration());
-		duration.push_back(listParameters.getd1YoungDuration());
-		vector <individual*> population = Makepopulation(listParameters.getPopulation(), listParameters.getYoung(), listParameters.getMedium(), listParameters.getInfectives1(),listParameters.getInfectives2(),  map, nbhouse, nbhouse2, nbinf1, nbinf2);
-		
+	listImages.getItopBackground()->apply_surface(screen.getScreen());		//On colle une nouvelle image en haut. Les autres fonds n'ont pas besoin d'être modifiés.
 
-		while (dayFigures.getNumber() < listParameters.getDuration())
+	vector <double> d1proba; //recupere les probabilités d'infection.
+	double probainf2 = listParameters.getd2MediumProba()->getNumber()/100.0;
+	d1proba.push_back(listParameters.getd1YoungProba()->getNumber()/100.0);
+	d1proba.push_back(listParameters.getd1MediumProba()->getNumber()/100.0);
+	d1proba.push_back(listParameters.getd1OldProba()->getNumber()/100.0);
+	vector <int> duration; //recupere les durees de la maladie1
+	duration.push_back(listParameters.getd1YoungDuration()->getNumber());
+	duration.push_back(listParameters.getd1MediumDuration()->getNumber());
+	duration.push_back(listParameters.getd1OldDuration()->getNumber());
+	vector <individual*> population = Makepopulation(listParameters.getPopulation()->getNumber(), listParameters.getYoung()->getNumber(), listParameters.getMedium()->getNumber(), listParameters.getInfectives1()->getNumber(),listParameters.getInfectives2()->getNumber(),  map, nbhouse, nbhouse2, nbinf1, nbinf2);
+
+	while (dayFigures.getNumber() < listParameters.getDuration()->getNumber())
+	{
+		SDL_Event event;
+		listImages.getImapBackground()->apply_surface(screen.getScreen()); //On colle l'image de la map, pour effacer tous les individus.
+		int popcounter = 0; //compteur du nombre d'individus
+		for (popcounter = 0; popcounter < listParameters.getPopulation()->getNumber(); popcounter++) //boucle sur les individus
 		{
-			SDL_Event event;
-			
-			listImages.getImapBackground().apply_surface(screen.GetScreen());
-			
-			int popcounter = 0;
-			for (popcounter = 0; popcounter < listParameters.getPopulation(); popcounter++)
+			individual* ind = population[popcounter]; 
+			ind->Move(map, nbhouse, nbhouse2); 
+			ind->Infection1(nbhouse, d1proba, map, dayFigures.getNumber(), nbinf1); 
+			ind->Infection2(nbhouse2, probainf2,map,nbinf2); 
+			ind->Cure(dayFigures.getNumber(),duration,nbinf1,nbhouse,map); 
+			//Si l'individu a la maladie1 et la maladie2 alors on colle l'image bleue (infectives12).
+			//Si l'individu a la maladie1 seulement alors on colle l'image verte (infectives1).
+			//Si l'individu a la maladie2 seulement alors on colle l'image orange (infectives2).
+			//Sinon, on colle l'image blanche (susceptibles).
+			if (ind->Getillness1() == true && ind->Getillness2() == true) {listImages.getIinfectives12()->setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIinfectives12()->apply_surface(screen.getScreen());}
+			else if (ind->Getillness1() == true) {listImages.getIinfectives1()->setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIinfectives1()->apply_surface(screen.getScreen());}
+			else if (ind->Getillness2() == true) {listImages.getIinfectives2()->setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIinfectives2()->apply_surface(screen.getScreen());}
+			else {listImages.getIsusceptibles()->setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIsusceptibles()->apply_surface(screen.getScreen());}
+		}
+		SDL_Flip(screen.getScreen()); //On met ?jour l'écran.
+		//On met ?jour tous les compteurs ?gauche de l'écran: les jours, les taux de malades1, les taux de malades1 jeune - median - vieux, et les taux de malades2.
+		dayFigures.update(dayFigures.getNumber()+1);
+		infectives1OnGoing.update(100.0*(nbinf1[0]+nbinf1[1]+nbinf1[2])/listParameters.getPopulation()->getNumber());
+		infectives1YoungOnGoing.update(100*nbinf1[0]/(listParameters.getPopulation()->getNumber()*listParameters.getYoung()->getNumber()/100));
+		infectives1MediumOnGoing.update(100*nbinf1[1]/(listParameters.getPopulation()->getNumber()*listParameters.getMedium()->getNumber()/100));
+		infectives1OldOnGoing.update(100*nbinf1[2]/(listParameters.getPopulation()->getNumber()*listParameters.getOld()->getNumber()/100));
+		infectives2OnGoing.update(100.0*nbinf2/(listParameters.getPopulation()->getNumber()*listParameters.getMedium()->getNumber()/100));
+
+		if (SDL_PollEvent(&event))
+		{
+			switch (event.type)
 			{
-			individual* ind = population[popcounter];
-			ind->Move(map, nbhouse, nbhouse2);
-			ind->Infection1(nbhouse, d1proba, map, dayFigures.getNumber(), nbinf1);
-			ind->Infection2(nbhouse2, probainf2,map,nbinf2);
-			ind->Cure(dayFigures.getNumber(),duration,nbinf1,nbhouse,map);
-			if (ind->Getillness1() == true && ind->Getillness2() == true) {listImages.getIinfectives12().setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIinfectives12().apply_surface(screen.GetScreen());}
-			else if (ind->Getillness1() == true) {listImages.getIinfectives1().setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIinfectives1().apply_surface(screen.GetScreen());}
-			else if (ind->Getillness2() == true) {listImages.getIinfectives2().setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIinfectives2().apply_surface(screen.GetScreen());}
-			else {listImages.getIsusceptibles().setCoord(xPixels(ind->Getx()), yPixels(ind->Gety())); listImages.getIsusceptibles().apply_surface(screen.GetScreen());}
-			}
-			
-			SDL_Flip(screen.GetScreen());
-			
-			dayFigures.remove();				
-			dayFigures.increment();					
-			dayFigures.refresh();
-
-			
-			if (SDL_PollEvent(&event)) {
-
-				switch (event.type){
-
-					//cliquer sur la touche p pour pause
-				case SDL_KEYDOWN:
-					switch (event.key.keysym.sym){
-					case SDLK_p:
-						do
-						SDL_WaitEvent(&event);
-						while (event.type != SDL_KEYDOWN);
-						continue;
-
-					default:continue;
-
-					}
-
-					//cliquer sur la croix pour quitter
-				case SDL_QUIT:
-					return EXIT_SUCCESS;
-
+			case SDL_KEYDOWN:
+				switch (event.key.keysym.sym)
+				{
+				//cliquer sur la touche p pour pause
+				case SDLK_p:
+					do
+					SDL_WaitEvent(&event);
+					while (event.type != SDL_KEYDOWN);
+					continue;
+				default:continue;
 				}
+			//cliquer sur la croix pour quitter
+			case SDL_QUIT:
+				return EXIT_SUCCESS;
 			}
 		}
+	}
 		
-
-		listImages.getIbackground().apply_surface(screen.GetScreen());					//On applique le fond sur l'écran 
-		listImages.getIendButton().apply_surface(screen.GetScreen());
-		listImages.getIrestartButton().apply_surface(screen.GetScreen());
-		SDL_Flip(screen.GetScreen());													//On affiche l'écran.
-
-	} while (end()); //on recommence la boucle do si fin=true (bouton restart) et on sort de la boucle si fin=false (bouton end)
-	
-
-		
+	listImages.getItopBackgroundEnd()->apply_surface(screen.getScreen());	//On applique l'image en haut, qui indique que le programme a termin? 
+	SDL_Flip(screen.getScreen());											//On met ?jour l'écran.
+	end();	//Si on clique sur le bouton "Quit Now", on quitte le programme.
 	SDL_Quit();
 }
-
-
-
-/***************************************************	DEFINITION DES FONCTIONS	***************************************************/
-
-
-/**********	start()	********************************************************************************/
-bool start()
-{
-	SDL_Event event;
-	int x, y;
-	do
-	SDL_WaitEvent(&event);
-	while (event.type == SDL_MOUSEMOTION);
-
-	switch (event.type)
-	{
-	case SDL_MOUSEBUTTONDOWN:
-		x = event.button.x;
-		y = event.button.y;
-		if (x>350 && x<450 && y>400 && y<441) return false;
-		break;
-
-	case SDL_QUIT:
-		exit(EXIT_SUCCESS);
-		break;
-	}
-	return start();
-}
-/***************************************************************************************************/
-
-
-/**********	end()	********************************************************************************/
-bool end()
-{
-
-	SDL_Event event;
-	int x, y;
-	do
-	SDL_WaitEvent(&event);
-	while (event.type == SDL_MOUSEMOTION);
-
-	switch (event.type)
-	{
-	case SDL_MOUSEBUTTONDOWN:
-		x = event.button.x;
-		y = event.button.y;
-		if (x>510 && x<610 && y>386 && y<418) return true;
-		if (x>620 && x<720 && y>386 && y<418) return false;
-		break;
-
-	case SDL_KEYDOWN:
-		if (event.key.keysym.sym == SDLK_ESCAPE) exit(EXIT_SUCCESS);
-		break;
-
-	case SDL_QUIT:
-		exit(EXIT_SUCCESS);
-		break;
-	}
-	return end();
-}
-/***************************************************************************************************/
-

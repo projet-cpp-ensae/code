@@ -1,6 +1,5 @@
 #include "square.h"
 
-
 square::square(void)
 {
 	_nature = 0;
